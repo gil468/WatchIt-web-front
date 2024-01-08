@@ -10,6 +10,29 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setEmail(inputValue);
+    setIsEmailValid(isValidEmailFormat(inputValue));
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setPassword(inputValue);
+    setIsPasswordValid(isValidPasswordFormat(inputValue));
+  };
+
+  const isValidEmailFormat = (email: string) => {
+    return email.includes("@" && ".com"); //ADD: && check that the email is in the DB
+  };
+
+  const isValidPasswordFormat = (password: string) => {
+    return password.length > 6; //ADD: && check that the password is in the DB
+  };
+
   const handleLogin = () => {
     onLogin(email, password);
   };
@@ -26,34 +49,42 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       </center>
       <form className="row g-3 needs-validation">
         <div className="mb-3">
-          <label htmlFor="validationTooltip01" className="form-label">
+          <label htmlFor="Email" className="form-label">
             Email:
           </label>
           <input
             type="text"
-            className="form-control"
-            id="validationTooltip01"
+            className={`form-control ${
+              isEmailValid ? "is-valid" : "is-invalid"
+            }`}
+            id="Email"
             value={email}
             placeholder="Email"
             required
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
           />
-          <div className="valid-tooltip">Looks good!</div>
+          <div className="valid-feedback">Looks good!</div>
+          <div className="invalid-feedback">Please provide a valid Email.</div>
         </div>
         <div className="mb-3">
-          <label htmlFor="validationTooltip02" className="form-label">
+          <label htmlFor="Password" className="form-label">
             Password:
           </label>
           <input
             type="password"
-            className="form-control"
+            className={`form-control ${
+              isPasswordValid ? "is-valid" : "is-invalid"
+            }`}
             value={password}
-            id="validationTooltip02"
+            id="Password"
             placeholder="Password"
             required
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
           />
-          <div className="valid-tooltip">Looks good!</div>
+          <div className="valid-feedback">Looks good!</div>
+          <div className="invalid-feedback">
+            Please provide a valid Password.
+          </div>
         </div>
         <div className="d-grid gap-2 col-6 mx-auto">
           <button

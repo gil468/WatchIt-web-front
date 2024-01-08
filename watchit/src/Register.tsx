@@ -88,7 +88,7 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
       </center>
       <form className="row g-3 needs-validation">
         <div className="mb-3">
-          <label htmlFor="validationCustom01" className="form-label">
+          <label htmlFor="FirstName" className="form-label">
             First Name:
           </label>
           <input
@@ -96,7 +96,7 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
             className={`form-control ${
               isFirstNameValid ? "is-valid" : "is-invalid"
             }`}
-            id="validationCustom01"
+            id="FirstName"
             value={firstname}
             placeholder="First Name"
             required
@@ -108,7 +108,7 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
           </div>
         </div>
         <div className="mb-3">
-          <label htmlFor="validationCustom01" className="form-label">
+          <label htmlFor="LastName" className="form-label">
             Last Name:
           </label>
           <input
@@ -116,7 +116,7 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
             className={`form-control ${
               isLastNameValid ? "is-valid" : "is-invalid"
             }`}
-            id="validationCustom01"
+            id="LastName"
             value={lastname}
             placeholder="Last Name"
             required
@@ -128,7 +128,7 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
           </div>
         </div>
         <div className="mb-3">
-          <label htmlFor="validationCustom01" className="form-label">
+          <label htmlFor="Email" className="form-label">
             Email:
           </label>
           <input
@@ -136,7 +136,7 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
             className={`form-control ${
               isEmailValid ? "is-valid" : "is-invalid"
             }`}
-            id="validationCustom01"
+            id="Email"
             value={email}
             placeholder="Email"
             required
@@ -146,7 +146,7 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
           <div className="invalid-feedback">Please provide a valid Email.</div>
         </div>
         <div className="mb-3">
-          <label htmlFor="validationTooltip02" className="form-label">
+          <label htmlFor="Password" className="form-label">
             Password:
           </label>
           <input
@@ -155,7 +155,7 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
               isPasswordValid ? "is-valid" : "is-invalid"
             }`}
             value={password}
-            id="validationTooltip02"
+            id="Password"
             placeholder="Password"
             required
             onChange={handlePasswordChange}
@@ -166,7 +166,7 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
           </div>
         </div>
         <div className="mb-3">
-          <label htmlFor="validationTooltip02" className="form-label">
+          <label htmlFor="ConfirmPassword" className="form-label">
             Confirm Password:
           </label>
           <input
@@ -175,7 +175,7 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
               isConfirmPasswordValid ? "is-valid" : "is-invalid"
             }`}
             value={confirmpassword}
-            id="validationTooltip02"
+            id="ConfirmPassword"
             placeholder="Confirm Password"
             required
             onChange={handleConfirmPasswordChange}
