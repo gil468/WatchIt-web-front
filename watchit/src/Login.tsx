@@ -55,7 +55,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           <input
             type="text"
             className={`form-control ${
-              isEmailValid ? "is-valid" : "is-invalid"
+              email === "" ? "" : isEmailValid ? "is-valid" : "is-invalid"
             }`}
             id="Email"
             value={email}
@@ -73,7 +73,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           <input
             type="password"
             className={`form-control ${
-              isPasswordValid ? "is-valid" : "is-invalid"
+              password === "" ? "" : isPasswordValid ? "is-valid" : "is-invalid"
             }`}
             value={password}
             id="Password"
@@ -103,9 +103,10 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       <div className="d-grid gap-2 col-6 mx-auto">
         <button type="button" className="btn btn-primary" onClick={handleLogin}>
           <img
-            src="./assets/Apple-Logo.png"
+            src="../images/apple.png"
             className="me-2"
-            style={{ width: "50px", height: "50px" }}
+            width="40"
+            height="40"
           />
           Sign in with Apple
         </button>

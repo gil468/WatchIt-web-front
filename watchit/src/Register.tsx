@@ -2,22 +2,24 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 
-interface LoginProps {
+interface RegisterProps {
   onRegister: (
     firstname: string,
     lastname: string,
     email: string,
     password: string,
-    confirmpassword: string
+    confirmpassword: string,
+    profileimage: File | undefined
   ) => void;
 }
 
-const Register: React.FC<LoginProps> = ({ onRegister }) => {
+const Register: React.FC<RegisterProps> = ({ onRegister }) => {
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
+  const [profileimage, setProfileImage] = useState<File>();
 
   const [isFirstNameValid, setIsFirstName] = useState(false);
   const [isLastNameValid, setIsLastName] = useState(false);
@@ -49,10 +51,17 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
     setIsPasswordValid(isValidPasswordFormat(inputValue));
   };
 
-  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleConfirmPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const inputValue = e.target.value;
     setConfirmPassword(inputValue);
     setIsConfirmPasswordValid(isValidConfirmPasswordFormat(inputValue));
+  };
+
+  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.files?.[0];
+    setProfileImage(inputValue);
   };
 
   const isValidNameFormat = (name: string) => {
@@ -65,7 +74,7 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
   };
 
   const isValidPasswordFormat = (password: string) => {
-    return password.length > 6;
+    return password.length > 5;
   };
 
   const isValidConfirmPasswordFormat = (confirmPassword: string) => {
@@ -73,7 +82,14 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
   };
 
   const handleRegister = () => {
-    onRegister(firstname, lastname, email, password, confirmpassword);
+    onRegister(
+      firstname,
+      lastname,
+      email,
+      password,
+      confirmpassword,
+      profileimage
+    );
   };
 
   const componentStyle = {
@@ -94,7 +110,11 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
           <input
             type="text"
             className={`form-control ${
-              isFirstNameValid ? "is-valid" : "is-invalid"
+              firstname === ""
+                ? ""
+                : isFirstNameValid
+                ? "is-valid"
+                : "is-invalid"
             }`}
             id="FirstName"
             value={firstname}
@@ -114,7 +134,7 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
           <input
             type="text"
             className={`form-control ${
-              isLastNameValid ? "is-valid" : "is-invalid"
+              lastname === "" ? "" : isLastNameValid ? "is-valid" : "is-invalid"
             }`}
             id="LastName"
             value={lastname}
@@ -134,7 +154,7 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
           <input
             type="text"
             className={`form-control ${
-              isEmailValid ? "is-valid" : "is-invalid"
+              email === "" ? "" : isEmailValid ? "is-valid" : "is-invalid"
             }`}
             id="Email"
             value={email}
@@ -152,7 +172,7 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
           <input
             type="password"
             className={`form-control ${
-              isPasswordValid ? "is-valid" : "is-invalid"
+              password === "" ? "" : isPasswordValid ? "is-valid" : "is-invalid"
             }`}
             value={password}
             id="Password"
@@ -172,7 +192,11 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
           <input
             type="password"
             className={`form-control ${
-              isConfirmPasswordValid ? "is-valid" : "is-invalid"
+              confirmpassword === ""
+                ? ""
+                : isConfirmPasswordValid
+                ? "is-valid"
+                : "is-invalid"
             }`}
             value={confirmpassword}
             id="ConfirmPassword"
@@ -183,6 +207,24 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
           <div className="valid-feedback">Looks good!</div>
           <div className="invalid-feedback">
             Please provide a valid Confirm Password.
+          </div>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="profileImage" className="form-label">
+            Profile Picture:
+          </label>
+          <input
+            className={`form-control ${
+              profileimage == undefined ? "" : "is-valid"
+            }`}
+            type="file"
+            id="profileImage"
+            accept="image/*"
+            onChange={handleProfileImageChange}
+            required
+          />
+          <div className="invalid-feedback">
+            Please provide a valid Profie Picture.
           </div>
         </div>
         <div className="d-grid gap-2 col-6 mx-auto">
@@ -203,9 +245,10 @@ const Register: React.FC<LoginProps> = ({ onRegister }) => {
           onClick={handleRegister}
         >
           <img
-            src="./assets/Apple-Logo.png"
+            src="../images/apple.png"
             className="me-2"
-            style={{ width: "50px", height: "50px" }}
+            width="40"
+            height="40"
           />
           Sign up with Apple
         </button>
