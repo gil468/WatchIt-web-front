@@ -14,11 +14,11 @@ const ReviewCard: React.FC = () => {
               height="80"
             />
           </div>
-          <div className="col-2 p-4">
+          <div className="col-2 p-4 ps-0">
             <p className="h5">Gil Segev</p>
           </div>
-          <div className="col p-4">
-            <button type="button" className="btn btn-outline-primary">
+          <div className="col p-4 mt-3 ps-0">
+            <button type="button" className="btn btn-outline-primary position-absolute top-10 start-10 translate-middle">
               Follow
             </button>
           </div>

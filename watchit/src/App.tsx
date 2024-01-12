@@ -3,8 +3,9 @@ import './App.css'
 import React from 'react';
 // import Login from './Login';
 // import Register from './Register';
-import Home from './Home'
+// import Home from './Home'
 import ReviewCard from './ReviewCard';
+import SuccessAlert from './SuccessAlert';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App: React.FC = () => {
@@ -18,7 +19,8 @@ const App: React.FC = () => {
 
   return (
     <div className="container">
-      <Home/>
+      {/* <Home/> */}
+      <SuccessAlert/>
       <ReviewCard/>
       {/* <Login onLogin={handleLogin} />
       <Register onRegister={handleRegister}/> */}
