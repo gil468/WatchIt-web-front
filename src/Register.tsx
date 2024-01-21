@@ -3,17 +3,25 @@ import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 
 interface RegisterProps {
-  onRegister: (
-    firstname: string,
-    lastname: string,
-    email: string,
-    password: string,
-    confirmpassword: string,
-    profileimage: File | undefined
-  ) => void;
 }
 
-const Register: React.FC<RegisterProps> = ({ onRegister }) => {
+const onRegister = (
+  firstname: string,
+  lastname: string,
+  email: string,
+  password: string,
+  confirmpassword: string
+) => {
+  console.log("Registerd with:", {
+    firstname,
+    lastname,
+    email,
+    password,
+    confirmpassword,
+  });
+};
+
+const Register: React.FC<RegisterProps> = () => {
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
