@@ -1,257 +1,160 @@
-// src/Login.tsx
-import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FieldValues, useForm } from "react-hook-form";
+import z from "zod";
 
-interface RegisterProps {
-}
+const schema = z
+  .object({
+    firstName: z
+      .string()
+      .min(1, "First Name must not be empty")
+      .max(20, "First Name must be less then 20 charecters"),
+    lastName: z
+      .string()
+      .min(1, "Last Name must not be empty")
+      .max(20, "Last Name must be less then 20 charecters"),
+    email: z.string().email("Email is invalid"),
+    password: z.string().min(5),
+    confirmPassword: z.string().min(5),
+    profilePicture: z
+      .any()
+      .refine((val) => val.length > 0, "Profile picture is required"),
+  })
+  .refine(
+    (values) => {
+      return values.password === values.confirmPassword;
+    },
+    {
+      message: "Passwords must match!",
+      path: ["confirmPassword"],
+    }
+  );
 
-const onRegister = (
-  firstname: string,
-  lastname: string,
-  email: string,
-  password: string,
-  confirmpassword: string
-) => {
-  console.log("Registerd with:", {
-    firstname,
-    lastname,
-    email,
-    password,
-    confirmpassword,
-  });
-};
+type FormData = z.infer<typeof schema>;
 
-const Register: React.FC<RegisterProps> = () => {
-  const [firstname, setFirstName] = useState("");
-  const [lastname, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmpassword, setConfirmPassword] = useState("");
-  const [profileimage, setProfileImage] = useState<File>();
+function Register() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, dirtyFields },
+  } = useForm<FormData>({ resolver: zodResolver(schema), mode: "onChange" });
 
-  const [isFirstNameValid, setIsFirstName] = useState(false);
-  const [isLastNameValid, setIsLastName] = useState(false);
-  const [isEmailValid, setIsEmailValid] = useState(false);
-  const [isPasswordValid, setIsPasswordValid] = useState(false);
-  const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
-
-  const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setFirstName(inputValue);
-    setIsFirstName(isValidNameFormat(inputValue));
-  };
-
-  const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setLastName(inputValue);
-    setIsLastName(isValidNameFormat(inputValue));
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setEmail(inputValue);
-    setIsEmailValid(isValidEmailFormat(inputValue));
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setPassword(inputValue);
-    setIsPasswordValid(isValidPasswordFormat(inputValue));
-  };
-
-  const handleConfirmPasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const inputValue = e.target.value;
-    setConfirmPassword(inputValue);
-    setIsConfirmPasswordValid(isValidConfirmPasswordFormat(inputValue));
-  };
-
-  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.files?.[0];
-    setProfileImage(inputValue);
-  };
-
-  const isValidNameFormat = (name: string) => {
-    const alphabeticRegex = /^[a-zA-Z]+$/;
-    return alphabeticRegex.test(name);
-  };
-
-  const isValidEmailFormat = (email: string) => {
-    return email.includes("@" && ".com");
-  };
-
-  const isValidPasswordFormat = (password: string) => {
-    return password.length > 5;
-  };
-
-  const isValidConfirmPasswordFormat = (confirmPassword: string) => {
-    return confirmPassword == password;
-  };
-
-  const handleRegister = () => {
-    onRegister(
-      firstname,
-      lastname,
-      email,
-      password,
-      confirmpassword,
-      profileimage
-    );
-  };
-
-  const componentStyle = {
-    backgroundColor: "#e0e0e0", // Set your desired background color
-    padding: "20px", // Add additional styles as needed
+  const onSubmit = (data: FieldValues) => {
+    console.log("on submit");
+    console.log(data);
   };
 
   return (
-    <div className="container mt-5" style={componentStyle}>
+    <div
+      className="container mt-5"
+      style={{
+        backgroundColor: "#e0e0e0",
+        padding: "20px",
+      }}
+    >
       <center>
         <h1>Register</h1>
       </center>
-      <form className="row g-3 needs-validation">
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-3">
-          <label htmlFor="FirstName" className="form-label">
-            First Name:
-          </label>
+          <label htmlFor="firstName">First Name:</label>
           <input
+            {...register("firstName")}
             type="text"
-            className={`form-control ${
-              firstname === ""
-                ? ""
-                : isFirstNameValid
-                ? "is-valid"
-                : "is-invalid"
-            }`}
-            id="FirstName"
-            value={firstname}
+            id="firstNname"
             placeholder="First Name"
-            required
-            onChange={handleFirstNameChange}
+            className="form-control"
           />
-          <div className="valid-feedback">Looks good!</div>
-          <div className="invalid-feedback">
-            Please provide a valid First Name.
-          </div>
+          {dirtyFields.firstName &&
+            ((errors.firstName && (
+              <p className="text-danger">{errors.firstName.message}</p>
+            )) || <p className="text-success">Looks Good!</p>)}
         </div>
         <div className="mb-3">
-          <label htmlFor="LastName" className="form-label">
-            Last Name:
-          </label>
+          <label htmlFor="lastName">Last Name:</label>
           <input
+            {...register("lastName")}
             type="text"
-            className={`form-control ${
-              lastname === "" ? "" : isLastNameValid ? "is-valid" : "is-invalid"
-            }`}
-            id="LastName"
-            value={lastname}
+            id="lastName"
             placeholder="Last Name"
-            required
-            onChange={handleLastNameChange}
+            className="form-control"
           />
-          <div className="valid-feedback">Looks good!</div>
-          <div className="invalid-feedback">
-            Please provide a valid Last Name.
-          </div>
+          {dirtyFields.lastName &&
+            ((errors.lastName && (
+              <p className="text-danger">{errors.lastName.message}</p>
+            )) || <p className="text-success">Looks Good!</p>)}
         </div>
         <div className="mb-3">
-          <label htmlFor="Email" className="form-label">
-            Email:
-          </label>
+          <label htmlFor="email">Email: </label>
           <input
+            {...register("email")}
             type="text"
-            className={`form-control ${
-              email === "" ? "" : isEmailValid ? "is-valid" : "is-invalid"
-            }`}
-            id="Email"
-            value={email}
+            id="email"
             placeholder="Email"
-            required
-            onChange={handleEmailChange}
+            className="form-control"
           />
-          <div className="valid-feedback">Looks good!</div>
-          <div className="invalid-feedback">Please provide a valid Email.</div>
+          {dirtyFields.email &&
+            ((errors.email && (
+              <p className="text-danger">{errors.email.message}</p>
+            )) || <p className="text-success">Looks Good!</p>)}
         </div>
         <div className="mb-3">
-          <label htmlFor="Password" className="form-label">
-            Password:
-          </label>
+          <label htmlFor="password">Password:</label>
           <input
+            {...register("password")}
             type="password"
-            className={`form-control ${
-              password === "" ? "" : isPasswordValid ? "is-valid" : "is-invalid"
-            }`}
-            value={password}
-            id="Password"
+            id="password"
             placeholder="Password"
-            required
-            onChange={handlePasswordChange}
+            className="form-control"
           />
-          <div className="valid-feedback">Looks good!</div>
-          <div className="invalid-feedback">
-            Please provide a valid Password.
-          </div>
+          {dirtyFields.password &&
+            ((errors.password && (
+              <p className="text-danger">{errors.password.message}</p>
+            )) || <p className="text-success">Looks Good!</p>)}
         </div>
         <div className="mb-3">
-          <label htmlFor="ConfirmPassword" className="form-label">
-            Confirm Password:
-          </label>
+          <label htmlFor="confirmPassword">Confirm Password:</label>
           <input
+            {...register("confirmPassword")}
             type="password"
-            className={`form-control ${
-              confirmpassword === ""
-                ? ""
-                : isConfirmPasswordValid
-                ? "is-valid"
-                : "is-invalid"
-            }`}
-            value={confirmpassword}
-            id="ConfirmPassword"
-            placeholder="Confirm Password"
-            required
-            onChange={handleConfirmPasswordChange}
+            id="confirmPassword"
+            placeholder="confirmPassword"
+            className="form-control"
           />
-          <div className="valid-feedback">Looks good!</div>
-          <div className="invalid-feedback">
-            Please provide a valid Confirm Password.
-          </div>
+          {dirtyFields.confirmPassword &&
+            ((errors.confirmPassword && (
+              <p className="text-danger">{errors.confirmPassword.message}</p>
+            )) || <p className="text-success">Looks Good!</p>)}
         </div>
+
         <div className="mb-3">
-          <label htmlFor="profileImage" className="form-label">
-            Profile Picture:
-          </label>
+          <label htmlFor="profilePicture">Profile Picture:</label>
           <input
-            className={`form-control ${
-              profileimage == undefined ? "" : "is-valid"
-            }`}
+            {...register("profilePicture")}
             type="file"
-            id="profileImage"
-            accept="image/*"
-            onChange={handleProfileImageChange}
-            required
+            accept="image/png, image/jpeg"
+            id="profilePicture"
+            placeholder="profilePicture"
+            className="form-control"
           />
-          <div className="invalid-feedback">
-            Please provide a valid Profie Picture.
-          </div>
+          {dirtyFields.profilePicture &&
+            ((errors.profilePicture && (
+              <p className="text-danger">
+                {errors.profilePicture?.message?.toString()}
+              </p>
+            )) || <p className="text-success">Looks Good!</p>)}
         </div>
-        <div className="d-grid gap-2 col-6 mx-auto">
-          <button
-            className="btn btn-primary"
-            type="submit"
-            onClick={handleRegister}
-          >
-            Sign up
+
+        <div className="text-center">
+          <button type="submit" className="btn btn-primary mx-auto">
+            Sign Up
           </button>
         </div>
       </form>
+
       <hr></hr>
-      <div className="d-grid gap-2 col-6 mx-auto">
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={handleRegister}
-        >
+
+      <div className="text-center">
+        <button type="button" className="btn btn-primary" onClick={() => {}}>
           <img
             src="../images/apple.png"
             className="me-2"
@@ -261,11 +164,14 @@ const Register: React.FC<RegisterProps> = () => {
           Sign up with Apple
         </button>
       </div>
+
+      <hr></hr>
+
       <center>
         <a href="#">Already have an account?</a>
       </center>
     </div>
   );
-};
+}
 
 export default Register;
