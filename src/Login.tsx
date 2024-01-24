@@ -1,22 +1,24 @@
 // src/Login.tsx
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 
-interface LoginProps {
-}
-
-const onLogin = (email: string, password: string) => {
-  console.log('Logged in with:', { email, password });
-};
+interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
+  const navigate = useNavigate();
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const onLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log("Logged in with:", { email, password });
+    navigate("/")
+  };
+
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
-
-
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -52,7 +54,7 @@ const Login: React.FC<LoginProps> = () => {
       <center>
         <h1>Login</h1>
       </center>
-      <form className="row g-3 needs-validation">
+      <form className="row g-3 needs-validation" onSubmit={onLogin}>
         <div className="mb-3">
           <label htmlFor="Email" className="form-label">
             Email:
@@ -92,11 +94,7 @@ const Login: React.FC<LoginProps> = () => {
           </div>
         </div>
         <div className="d-grid gap-2 col-6 mx-auto">
-          <button
-            className="btn btn-primary"
-            type="submit"
-            onClick={handleLogin}
-          >
+          <button className="btn btn-primary" type="submit">
             Login
           </button>
         </div>

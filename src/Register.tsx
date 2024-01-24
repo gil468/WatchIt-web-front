@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import z from "zod";
 
 const schema = z
@@ -32,6 +33,8 @@ const schema = z
 type FormData = z.infer<typeof schema>;
 
 function Register() {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -41,6 +44,7 @@ function Register() {
   const onSubmit = (data: FieldValues) => {
     console.log("on submit");
     console.log(data);
+    navigate("/")
   };
 
   return (

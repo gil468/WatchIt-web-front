@@ -1,13 +1,15 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import PhothosCarousel from "./PhotosCarousel";
 import Navbar from "./Navbar";
+import ReviewCard from "./ReviewCard";
 
 const Home: React.FC = () => {
   return (
     <>
-      <Navbar></Navbar>
-      <PhothosCarousel></PhothosCarousel>
+      <Navbar />
+      {Array.from({ length: 16 }, (_) => (
+        <ReviewCard />
+      ))}
     </>
   );
 };
