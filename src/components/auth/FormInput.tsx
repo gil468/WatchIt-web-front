@@ -1,27 +1,27 @@
 import { useFormContext } from "react-hook-form";
 
-interface RegisterFormInputProps {
+export interface FormInputProps {
   name: string;
   label: string;
   type: string;
   placeholder?: string;
-  validFeedback?: boolean;
+  showValidFeedback?: boolean;
 }
 
-const FormInput: React.FC<RegisterFormInputProps> = ({
+const FormInput: React.FC<FormInputProps> = ({
   name,
   label,
   type,
   placeholder = "",
-  validFeedback = false,
-}: RegisterFormInputProps) => {
+  showValidFeedback = false,
+}: FormInputProps) => {
   const {
     register,
     formState: { errors, dirtyFields },
   } = useFormContext();
 
   return (
-    <div className={`mb-3`}>
+    <div className={`mb-${(errors[name] && "0") || "3"} has-validation`}>
       <label htmlFor={name}>{label}:</label>
       <input
         {...register(name)}
@@ -29,14 +29,17 @@ const FormInput: React.FC<RegisterFormInputProps> = ({
         id={name}
         placeholder={placeholder}
         accept={type === "file" ? "image/png, image/jpeg" : undefined}
-        className="form-control"
+        className={`form-control
+
+        ${
+          (errors[name] && "is-invalid") ||
+          (showValidFeedback && dirtyFields[name] && "is-valid") ||
+          ""
+        }`}
       />
-      {(errors[name] && (
-        <p className="text-danger ms-1">{errors[name]?.message?.toString()}</p>
-      )) ||
-        (validFeedback && dirtyFields[name] && (
-          <p className="text-success ms-1">Looks Good!</p>
-        ))}
+      <div className="invalid-feedback my-0">
+        <small>{errors[name]?.message?.toString()}</small>
+      </div>
     </div>
   );
 };

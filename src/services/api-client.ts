@@ -4,6 +4,10 @@ export { CanceledError };
 
 const baseURL = "http://localhost:3000";
 
+export const unauthorizedApiClient = axios.create({
+  baseURL: baseURL,
+});
+
 export const refreshTokenApiClient = axios.create({
   baseURL: baseURL,
 });

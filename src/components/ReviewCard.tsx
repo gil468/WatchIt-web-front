@@ -1,61 +1,93 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const ReviewCard: React.FC = () => {
+interface ReviewCardProps {
+  reviewerName: string;
+  reviewerProfilePictureUrl: string;
+  postedOn: Date;
+  reviewScore: 1 | 2 | 3 | 4 | 5;
+  reviewImageUrl: string;
+  reviewText: string;
+  likeCount: number;
+  commentsCount: number;
+  isLiked: boolean;
+  likeReview(): void;
+  commentOnReview(): void;
+}
+
+const ReviewCard: React.FC<ReviewCardProps> = ({
+  reviewerName,
+  reviewerProfilePictureUrl,
+  postedOn,
+  reviewScore,
+  reviewImageUrl,
+  reviewText,
+  likeCount,
+  commentsCount,
+  isLiked,
+  likeReview,
+  commentOnReview,
+}) => {
   return (
-    <div className="card w-50 mx-auto my-3">
-      <div className="container">
-        <div className="row align-items-center justify-content-start">
-          <div className="col-1">
+    <div className="card w-50 mx-auto my-3 px-4 py-3">
+      <div className="container px-0">
+        <div className="d-flex justify-content-between align-items-center ms-0">
+          <div className="d-flex align-items-center ms-0">
             <img
-              src="../public/images/profile_pic_placeholder.png"
+              alt="Reviewer Avatar"
+              className="rounded-circle ms-0 me-2"
               height="50"
+              width="50"
+              src={reviewerProfilePictureUrl}
             />
+
+            <p className="h5 my-0">{reviewerName}</p>
           </div>
-          <div className="col-3">
-            <p className="h5 align-middle m-0 h-100">Gil Segev</p>
-          </div>
-          <div className="col-2">
-            <button type="button" className="btn btn-sm btn-outline-dark">
-              Follow
-            </button>
-          </div>
+          <small className="my-0 text-muted">
+            {`${postedOn.toLocaleDateString()} ${postedOn.toLocaleTimeString()}`}
+          </small>
         </div>
       </div>
       <img
-        src="../public/images/WatchIt!.png"
-        className="card-img-top"
+        src={reviewImageUrl}
+        className="card-img-top mt-2"
         height="200"
         style={{ backgroundColor: "#e3f2fd" }}
       />
-      <div className="card-body text-center">
-        <h5 className="card-title">Card title</h5>
-        <p className="card-text">
-          This is a wider card with supporting text below as a natural lead-in
-          to additional content. This content is a little bit longer.
-        </p>
-        <p className="card-text">
-          <small className="text-body-secondary">Last updated 3 mins ago</small>
-        </p>
+      <div className="card-body ps-0">
+        <span className="fw-bold me-2">Score:</span>
+        {Array.from({ length: reviewScore }, (_) => (
+          <i className="bi bi-star-fill me-1" style={{ color: "#ecc94b" }} />
+        ))}
+
+        {Array.from({ length: 5 - reviewScore }, (_) => (
+          <i className="bi bi-star me-1" style={{ color: "#ecc94b" }} />
+        ))}
+
+        <p className="card-text mt-2">{reviewText}</p>
       </div>
-      <div className="card-footer text-center py-3">
-        <div className="row">
-          <div className="col">
-            <button type="button" className="btn btn-outline-dark">
-              <i className="bi bi-heart me-3"></i>
-              Like
-              <div className="vr mx-2 align-middle"></div>
-              75
-            </button>
-          </div>
-          <div className="col">
-            <button type="button" className="btn btn-outline-dark">
-              <i className="bi bi-chat me-3"></i>
-              Comment
-              <div className="vr mx-2 align-middle"></div>
-              12
-            </button>
-          </div>
+      <div className="text-center py-3">
+        <div className="d-flex justify-content-center gap-3">
+          <button
+            type="button"
+            className={`btn ${(isLiked && "btn-dark") || "btn-outline-dark"}`}
+            onClick={likeReview}
+          >
+            <i className="bi bi-heart me-2 align-middle"></i>
+            Like
+            <div className="vr mx-2 align-middle"></div>
+            {likeCount}
+          </button>
+          <button
+            type="button"
+            className="btn btn-outline-dark"
+            onClick={commentOnReview}
+          >
+            <i className="bi bi-chat me-2 align-middle"></i>
+            Comment
+            <div className="vr mx-2 align-middle"></div>
+            {commentsCount}
+          </button>
         </div>
       </div>
     </div>

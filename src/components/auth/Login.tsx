@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import z from "zod";
 import "./shake.css";
-import { FieldValues, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormInput from "./FormInput";
+import FormInput, { FormInputProps } from "./FormInput";
 import { googleSignin, login } from "../../services/user-service";
-import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { CodeResponse, useGoogleLogin } from "@react-oauth/google";
 
 const schema = z.object({
   email: z.string().email("Email is invalid"),
@@ -15,12 +15,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const inputFields: {
-  name: keyof FormData;
-  label: string;
-  type: string;
-  placeholder?: string;
-}[] = [
+const inputFields: FormInputProps[] = [
   {
     name: "email",
     label: "Email",
@@ -51,7 +46,7 @@ const Login: React.FC = () => {
     setShake(true);
   };
 
-  const onSubmit = async ({ email, password }: FieldValues) => {
+  const onSubmit = async ({ email, password }: FormData) => {
     setSubmittedUnauthorized(false);
     try {
       await login({
@@ -65,59 +60,69 @@ const Login: React.FC = () => {
     }
   };
 
-  const onGoogleLoginSuccess = async (
-    credentialResponse: CredentialResponse
-  ) => {
+  const onGoogleLoginSuccess = async (credentialResponse: CodeResponse) => {
     await googleSignin(credentialResponse);
     navigate("/");
   };
 
+  const googleLogin = useGoogleLogin({
+    onSuccess: onGoogleLoginSuccess,
+    flow: "auth-code",
+  });
+
   return (
-    <div
-      className={`container rounded mt-5 ${shake && "shake"}`}
-      onAnimationEnd={() => setShake(false)}
-      style={{
-        backgroundColor: "#e0e0e0",
-        padding: "20px",
-      }}
-    >
-      <div className="text-center">
-        <h1>Log In</h1>
-      </div>
-      <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit, onErrorSubmit)}>
-          {inputFields.map((field) => (
-            <FormInput key={field.name} {...field} />
-          ))}
+    <div className="d-flex min-vh-100 align-items-center justify-content-center">
+      <div
+        className={`border border-2 p-4 rounded ${shake && "shake"}`}
+        onAnimationEnd={() => setShake(false)}
+        style={{
+          maxWidth: "30rem",
+        }}
+      >
+        <div className="text-center">
+          <h1>Login</h1>
+          <p className="text-muted mt-3">
+            Enter your email and password to login to your account
+          </p>
+        </div>
+        <FormProvider {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit, onErrorSubmit)}>
+            <div className="mb-4">
+              {inputFields.map((field) => (
+                <FormInput key={field.name} {...field} showValidFeedback />
+              ))}
+            </div>
+            <div className={`text-center`}>
+              {submittedUnauthorized && (
+                <span className="text-danger">
+                  Email or password are incrorect
+                </span>
+              )}
+              <button type="submit" className="btn btn-dark w-100 mt-1 mx-auto">
+                Login
+              </button>
+            </div>
+          </form>
+        </FormProvider>
 
-          <div className="text-center">
-            {submittedUnauthorized && (
-              <p className="text-danger mb-1">
-                Email or password are incrorect
-              </p>
-            )}
-            <button type="submit" className="btn btn-dark mx-auto">
-              Log In
-            </button>
-          </div>
-        </form>
-      </FormProvider>
+        <div className="d-flex justify-content-center mt-2">
+          <button
+            type="submit"
+            className="btn btn-outline-dark w-100 mx-auto"
+            onClick={() => googleLogin()}
+          >
+            <i className="bi bi-google me-2" />
+            Login With Google
+          </button>
+        </div>
 
-      <hr></hr>
-      <div className="d-flex justify-content-center">
-        <GoogleLogin
-          onSuccess={onGoogleLoginSuccess}
-          theme="filled_black"
-          locale="en_US"
-        />
-      </div>
+        <hr className="mb-2" />
 
-      <hr></hr>
-
-      <div className="text-center">
-        <a className="text-black" href="/register">
-          Don't have an account yet?
-        </a>
+        <div className="text-center">
+          <a className="text-black" href="/register">
+            Don't have an account? Register
+          </a>
+        </div>
       </div>
     </div>
   );

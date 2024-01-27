@@ -1,24 +1,24 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { FieldValues, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import z from "zod";
 import "./shake.css";
-import FormInput from "./FormInput";
+import FormInput, { FormInputProps } from "./FormInput";
 import { uploadPhoto } from "../../services/file-service";
 import { IUser, googleSignin, register } from "../../services/user-service";
-import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { CodeResponse, useGoogleLogin } from "@react-oauth/google";
 
 const schema = z
   .object({
-    firstName: z
+    fullName: z
       .string()
-      .min(1, "First Name must not be empty")
-      .max(20, "First Name must be less then 20 charecters"),
-    lastName: z
-      .string()
-      .min(1, "Last Name must not be empty")
-      .max(20, "Last Name must be less then 20 charecters"),
+      .regex(
+        /^[a-zA-Z]{2,}(?: [a-zA-Z]{2,}){1,3}$/,
+        "Please provide a vaild full name"
+      )
+      .min(1, "Full Name must not be empty")
+      .max(20, "Full Name must be less then 30 charecters"),
     email: z.string().email("Email is invalid"),
     password: z.string().min(5, "Password must contain at least 5 characters"),
     confirmPassword: z
@@ -40,21 +40,18 @@ const schema = z
 
 type FormData = z.infer<typeof schema>;
 
-const inputFields: { name: keyof FormData; label: string; type: string }[] = [
+const inputFields: FormInputProps[] = [
   {
-    name: "firstName",
-    label: "First Name",
+    name: "fullName",
+    label: "Full Name",
     type: "text",
-  },
-  {
-    name: "lastName",
-    label: "Last Name",
-    type: "text",
+    placeholder: "John Doe",
   },
   {
     name: "email",
     label: "Email",
     type: "text",
+    placeholder: "a@example.com",
   },
   {
     name: "password",
@@ -84,17 +81,15 @@ const Register: React.FC = () => {
   });
 
   const onSubmit = async ({
-    firstName,
-    lastName,
+    fullName,
     email,
     password,
     profilePicture,
-  }: FieldValues) => {
+  }: FormData) => {
     const imgUrl = await uploadPhoto(profilePicture[0]);
 
     const user: IUser = {
-      firstName,
-      lastName,
+      fullName,
       email,
       password,
       imgUrl,
@@ -108,56 +103,70 @@ const Register: React.FC = () => {
     setShake(true);
   };
 
-  const onGoogleLoginSuccess = async (
-    credentialResponse: CredentialResponse
-  ) => {
+  const onGoogleLoginSuccess = async (credentialResponse: CodeResponse) => {
     await googleSignin(credentialResponse);
     navigate("/");
   };
 
-  return (
-    <div
-      className={`container rounded mt-5 ${shake && "shake"}`}
-      onAnimationEnd={() => setShake(false)}
-      style={{
-        backgroundColor: "#e0e0e0",
-        padding: "20px",
-      }}
-    >
-      <div className="text-center">
-        <h1>Register</h1>
-      </div>
-      <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit, onErrorSubmit)}>
-          {inputFields.map((field) => (
-            <FormInput key={field.name} {...field} validFeedback />
-          ))}
+  const googleLogin = useGoogleLogin({
+    onSuccess: onGoogleLoginSuccess,
+    flow: "auth-code",
+  });
 
-          <div className="text-center">
-            <button type="submit" className="btn btn-dark mx-auto">
-              Sign Up
+  return (
+    <div className="d-flex min-vh-100 align-items-center justify-content-center py-2">
+      <div
+        className={`border border-2 p-4 rounded ${shake && "shake"}`}
+        onAnimationEnd={() => setShake(false)}
+        style={{
+          width: "35rem",
+        }}
+      >
+        <div className="text-center">
+          <h1>Register</h1>
+          <p className="text-muted mt-3">
+            Please provide your information below to sign up for our website
+          </p>
+        </div>
+        <div
+          className="overflow-auto"
+          style={{
+            maxHeight: "calc(100vh - 11rem)",
+          }}
+        >
+          <FormProvider {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit, onErrorSubmit)}>
+              {inputFields.map((field) => (
+                <FormInput key={field.name} {...field} showValidFeedback />
+              ))}
+
+              <div className="text-center mt-4">
+                <button type="submit" className="btn btn-dark w-100 mx-auto">
+                  Sign Up
+                </button>
+              </div>
+            </form>
+          </FormProvider>
+
+          <div className="d-flex justify-content-center mt-2">
+            <button
+              type="submit"
+              className="btn btn-outline-dark w-100 mx-auto"
+              onClick={() => googleLogin()}
+            >
+              <i className="bi bi-google me-2" />
+              Sign Up With Google
             </button>
           </div>
-        </form>
-      </FormProvider>
 
-      <hr></hr>
+          <hr className="mb-2" />
 
-      <div className="d-flex justify-content-center">
-        <GoogleLogin
-          onSuccess={onGoogleLoginSuccess}
-          text="signup_with"
-          locale="en_US"
-          theme="filled_black"
-        />
-      </div>
-
-      <hr></hr>
-
-      <div className="text-center">
-        <a className="text-black" href="/login">
-          Already have an account?
-        </a>
+          <div className="text-center">
+            <a className="text-black text-center" href="/login">
+              Already have an account? Login
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );

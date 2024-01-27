@@ -13,7 +13,7 @@ import Login from "./components/auth/Login.tsx";
 import Register from "./components/auth/Register.tsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-const loader = () => {
+const auzthorizedRouteLoader = () => {
   const token = localStorage.getItem("refresh_token");
   if (!token) {
     return redirect("/login");
@@ -21,18 +21,28 @@ const loader = () => {
   return null;
 };
 
+const nonAuthorizedRouteLoader = () => {
+  const token = localStorage.getItem("refresh_token");
+  if (token) {
+    return redirect("/");
+  }
+  return null;
+};
+
 const router = createBrowserRouter([
   {
     path: "/",
-    loader,
+    loader: auzthorizedRouteLoader,
     element: <Home />,
   },
   {
     path: "/login",
+    loader: nonAuthorizedRouteLoader,
     element: <Login />,
   },
   {
     path: "/register",
+    loader: nonAuthorizedRouteLoader,
     element: <Register />,
   },
 ]);
