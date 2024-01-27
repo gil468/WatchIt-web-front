@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useRef } from "react";
 import { logout } from "../services/user-service";
 import { useNavigate } from "react-router-dom";
+import { searchMovie } from "../services/movie-service";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
 
+  const searchTerm = useRef<HTMLInputElement>(null);
+
   const handleLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  const handleSearch = async (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    console.log(searchTerm.current?.value);
+    const movies = await searchMovie(searchTerm.current?.value!);
+    console.log(movies);
   };
 
   return (
@@ -56,6 +66,7 @@ const Navbar: React.FC = () => {
             <div className="input-group">
               <input
                 type="text"
+                ref={searchTerm}
                 className="form-control"
                 placeholder="Movie title.."
                 aria-label="Movie title.."
@@ -65,6 +76,7 @@ const Navbar: React.FC = () => {
                 className="btn btn-outline-secondary"
                 type="button"
                 id="button-addon2"
+                onClick={handleSearch}
               >
                 Search
               </button>

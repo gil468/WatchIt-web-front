@@ -53,6 +53,7 @@ apiClient.interceptors.response.use(
         return axios(originalRequest);
       } catch (error) {
         console.log("error", error);
+        window.location.href = "/login";
       }
     }
 

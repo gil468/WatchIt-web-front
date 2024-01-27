@@ -2,7 +2,6 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const ReviewCard: React.FC = () => {
-
   return (
     <div className="card w-50 mx-auto my-3">
       <div className="container">
@@ -13,11 +12,11 @@ const ReviewCard: React.FC = () => {
               height="50"
             />
           </div>
-          <div className="col-2">
+          <div className="col-3">
             <p className="h5 align-middle m-0 h-100">Gil Segev</p>
           </div>
           <div className="col-2">
-            <button type="button" className="btn btn-sm btn-outline-primary">
+            <button type="button" className="btn btn-sm btn-outline-dark">
               Follow
             </button>
           </div>
@@ -39,21 +38,22 @@ const ReviewCard: React.FC = () => {
           <small className="text-body-secondary">Last updated 3 mins ago</small>
         </p>
       </div>
-      <div className="card-footer text-center">
+      <div className="card-footer text-center py-3">
         <div className="row">
-          <div className="col p-4">
-            <button type="button" className="btn btn-outline-primary">
+          <div className="col">
+            <button type="button" className="btn btn-outline-dark">
+              <i className="bi bi-heart me-3"></i>
               Like
+              <div className="vr mx-2 align-middle"></div>
+              75
             </button>
           </div>
-          <div className="col p-4">
-            <button type="button" className="btn btn-outline-primary">
+          <div className="col">
+            <button type="button" className="btn btn-outline-dark">
+              <i className="bi bi-chat me-3"></i>
               Comment
-            </button>
-          </div>
-          <div className="col p-4">
-            <button type="button" className="btn btn-outline-primary">
-              Add To Watchlist
+              <div className="vr mx-2 align-middle"></div>
+              12
             </button>
           </div>
         </div>

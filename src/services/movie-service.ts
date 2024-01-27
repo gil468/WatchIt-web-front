@@ -1,6 +1,6 @@
 import apiClient from "./api-client";
 
-export interface MovieResponse {
+export interface Movie {
   backdrop_path: string;
   id: number;
   title: string;
@@ -10,15 +10,18 @@ export interface MovieResponse {
 }
 
 export const searchMovie = (searchTerm: string) => {
-  return new Promise<MovieResponse>((resolve, reject) => {
+  return new Promise<Movie[]>((resolve, reject) => {
     apiClient
       .get(`/movies/search/${searchTerm}`)
       .then((response) => {
-        console.log(response);
-        resolve(response.data);
+        const movies = (response.data as Movie[])
+          .filter((movie: Movie) => movie.popularity > 30)
+          .sort((a, b) => b.popularity - a.popularity);
+
+        resolve(movies);
       })
       .catch((error) => {
-        console.log(error);
+        console.log("error movies", error);
         reject(error);
       });
   });

@@ -7,8 +7,8 @@ const Home: React.FC = () => {
   return (
     <>
       <Navbar />
-      {Array.from({ length: 16 }, (_) => (
-        <ReviewCard />
+      {Array.from({ length: 16 }, (_, id) => (
+        <ReviewCard key={id} />
       ))}
     </>
   );
