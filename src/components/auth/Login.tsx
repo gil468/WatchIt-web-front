@@ -5,7 +5,7 @@ import "./shake.css";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "./FormInput";
-import { IUser, googleSignin, login } from "../../services/user-service";
+import { googleSignin, login } from "../../services/user-service";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 
 const schema = z.object({
@@ -15,16 +15,23 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const inputFields: { name: keyof FormData; label: string; type: string }[] = [
+const inputFields: {
+  name: keyof FormData;
+  label: string;
+  type: string;
+  placeholder?: string;
+}[] = [
   {
     name: "email",
     label: "Email",
     type: "text",
+    placeholder: "a@example.com",
   },
   {
     name: "password",
     label: "Password",
     type: "password",
+    placeholder: "your secret password",
   },
 ];
 
@@ -32,34 +39,38 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
 
   const [shake, setShake] = useState(false);
+  const [submittedUnauthorized, setSubmittedUnauthorized] = useState(false);
 
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange",
   });
 
-  const onSubmit = async ({ email, password }: FieldValues) => {
-    const user: IUser = {
-      email,
-      password,
-    };
-    const res = await login(user);
-    console.log(res);
-
-    navigate("/");
-  };
-
   const onErrorSubmit = () => {
+    setSubmittedUnauthorized(false);
     setShake(true);
   };
 
-  function onGoogleLoginSuccess(credentialResponse: CredentialResponse): void {
-    googleSignin(credentialResponse);
-  }
+  const onSubmit = async ({ email, password }: FieldValues) => {
+    setSubmittedUnauthorized(false);
+    try {
+      await login({
+        email,
+        password,
+      });
+      navigate("/");
+    } catch (err) {
+      setShake(true);
+      setSubmittedUnauthorized(true);
+    }
+  };
 
-  function onGoogleLoginFailure(): void {
-    throw new Error("Function not implemented.");
-  }
+  const onGoogleLoginSuccess = async (
+    credentialResponse: CredentialResponse
+  ) => {
+    await googleSignin(credentialResponse);
+    navigate("/");
+  };
 
   return (
     <div
@@ -80,6 +91,11 @@ const Login: React.FC = () => {
           ))}
 
           <div className="text-center">
+            {submittedUnauthorized && (
+              <p className="text-danger mb-1">
+                Email or password are incrorect
+              </p>
+            )}
             <button type="submit" className="btn btn-dark mx-auto">
               Log In
             </button>
@@ -91,8 +107,8 @@ const Login: React.FC = () => {
       <div className="d-flex justify-content-center">
         <GoogleLogin
           onSuccess={onGoogleLoginSuccess}
-          onError={onGoogleLoginFailure}
           theme="filled_black"
+          locale="en_US"
         />
       </div>
 

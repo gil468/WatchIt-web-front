@@ -4,6 +4,7 @@ interface RegisterFormInputProps {
   name: string;
   label: string;
   type: string;
+  placeholder?: string;
   validFeedback?: boolean;
 }
 
@@ -11,6 +12,7 @@ const FormInput: React.FC<RegisterFormInputProps> = ({
   name,
   label,
   type,
+  placeholder = "",
   validFeedback = false,
 }: RegisterFormInputProps) => {
   const {
@@ -25,14 +27,15 @@ const FormInput: React.FC<RegisterFormInputProps> = ({
         {...register(name)}
         type={type}
         id={name}
+        placeholder={placeholder}
         accept={type === "file" ? "image/png, image/jpeg" : undefined}
         className="form-control"
       />
       {(errors[name] && (
-        <p className="text-danger">{errors[name]?.message?.toString()}</p>
+        <p className="text-danger ms-1">{errors[name]?.message?.toString()}</p>
       )) ||
         (validFeedback && dirtyFields[name] && (
-          <p className="text-success">Looks Good!</p>
+          <p className="text-success ms-1">Looks Good!</p>
         ))}
     </div>
   );

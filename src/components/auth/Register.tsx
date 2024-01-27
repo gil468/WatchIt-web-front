@@ -6,8 +6,8 @@ import z from "zod";
 import "./shake.css";
 import FormInput from "./FormInput";
 import { uploadPhoto } from "../../services/file-service";
-import { IUser, register } from "../../services/user-service";
-import { GoogleLogin } from "@react-oauth/google";
+import { IUser, googleSignin, register } from "../../services/user-service";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 
 const schema = z
   .object({
@@ -90,17 +90,7 @@ const Register: React.FC = () => {
     password,
     profilePicture,
   }: FieldValues) => {
-    console.log(
-      "on submit",
-      firstName,
-      lastName,
-      email,
-      password,
-      profilePicture
-    );
-
     const imgUrl = await uploadPhoto(profilePicture[0]);
-    console.log("upload returned:" + imgUrl);
 
     const user: IUser = {
       firstName,
@@ -109,23 +99,21 @@ const Register: React.FC = () => {
       password,
       imgUrl,
     };
-    const res = await register(user);
-    console.log(res);
 
-    navigate("/login");
+    await register(user);
+    navigate("/");
   };
 
   const onErrorSubmit = () => {
     setShake(true);
   };
 
-  function onGoogleLoginSuccess(credentialResponse: CredentialResponse): void {
-    throw new Error("Function not implemented.");
-  }
-
-  function onGoogleLoginFailure(): void {
-    throw new Error("Function not implemented.");
-  }
+  const onGoogleLoginSuccess = async (
+    credentialResponse: CredentialResponse
+  ) => {
+    await googleSignin(credentialResponse);
+    navigate("/");
+  };
 
   return (
     <div
@@ -158,8 +146,8 @@ const Register: React.FC = () => {
       <div className="d-flex justify-content-center">
         <GoogleLogin
           onSuccess={onGoogleLoginSuccess}
-          onError={onGoogleLoginFailure}
           text="signup_with"
+          locale="en_US"
           theme="filled_black"
         />
       </div>

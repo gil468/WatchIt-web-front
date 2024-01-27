@@ -1,75 +1,86 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { logout } from "../services/user-service";
+import { useNavigate } from "react-router-dom";
 
 const Navbar: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
-    <div style={{ padding: "30px" }}>
-      <nav
-        className="navbar fixed-top navbar-expand-lg"
-        style={{ backgroundColor: "#e3f2fd" }}
-      >
-        <div className="container-fluid">
-          <a className="navbar-brand" href="#">
-            <img
-              src="../images/WatchIt!.png"
-              alt="Logo"
-              width="30"
-              height="24"
-              className="d-inline-block align-text-top"
-            />
-            <span style={{ paddingLeft: "5px" }}>WatchIt!</span>
-          </a>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#">
-                  Home
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Watchlist
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Upload
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#">
-                  Profile
-                </a>
-              </li>
-            </ul>
-            <div className="container-fluid">
-              <form className="d-flex" role="search">
-                <input
-                  className="form-control me-2"
-                  type="search"
-                  placeholder="Search"
-                  aria-label="Search"
-                />
-                <button className="btn btn-outline-success" type="submit">
-                  Search
-                </button>
-              </form>
+    <nav className="navbar navbar-expand-lg bg-light">
+      <div className="container-fluid">
+        <img
+          src="../images/WatchIt!.png"
+          alt="Logo"
+          width="35"
+          height="35"
+          className="mx-2"
+        />
+        <a className="navbar-brand" href="/">
+          WatchIt!
+        </a>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <a className="nav-link active" aria-current="page" href="#">
+                Home
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#">
+                Upload
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#">
+                My Profile
+              </a>
+            </li>
+          </ul>
+          <form className="d-flex" role="search">
+            <div className="input-group">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Movie title.."
+                aria-label="Movie title.."
+                aria-describedby="button-addon2"
+              />
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                id="button-addon2"
+              >
+                Search
+              </button>
             </div>
-          </div>
+          </form>
+
+          <button
+            className="btn btn-outline-danger nav-item ms-lg-2 mt-3 mt-lg-0"
+            type="button"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
         </div>
-      </nav>
-    </div>
+      </div>
+    </nav>
   );
 };
 
