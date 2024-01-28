@@ -89,7 +89,7 @@ const Login: React.FC = () => {
           <form onSubmit={form.handleSubmit(onSubmit, onErrorSubmit)}>
             <div className="mb-4">
               {inputFields.map((field) => (
-                <FormInput key={field.name} {...field} showValidFeedback />
+                <FormInput key={field.name} {...field} />
               ))}
             </div>
             <div className={`text-center`}>
