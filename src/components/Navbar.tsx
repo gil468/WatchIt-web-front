@@ -1,23 +1,15 @@
-import React, { useRef } from "react";
+import React from "react";
 import { logout } from "../services/user-service";
 import { useNavigate } from "react-router-dom";
-import { searchMovie } from "../services/movie-service";
+import { useLocation } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
-
-  const searchTerm = useRef<HTMLInputElement>(null);
+  const location = useLocation();
 
   const handleLogout = () => {
     logout();
     navigate("/login");
-  };
-
-  const handleSearch = async (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
-    console.log(searchTerm.current?.value);
-    const movies = await searchMovie(searchTerm.current?.value!);
-    console.log(movies);
   };
 
   return (
@@ -30,7 +22,7 @@ const Navbar: React.FC = () => {
           height="35"
           className="mx-2"
         />
-        <a className="navbar-brand" href="/">
+        <a className="navbar-brand" href="home">
           WatchIt!
         </a>
         <button
@@ -47,42 +39,21 @@ const Navbar: React.FC = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="#">
+              <a className={`nav-link ${location.pathname === '/home' ? 'active' : ''}`} aria-current="page" href="home">
                 Home
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
-                Upload
+              <a className={`nav-link ${location.pathname === '/search' ? 'active' : ''}`} href="search">
+                Search
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <a className={`nav-link ${location.pathname === '/profile' ? 'active' : ''}`} href="profile">
                 My Profile
               </a>
             </li>
           </ul>
-          <form className="d-flex" role="search">
-            <div className="input-group">
-              <input
-                type="text"
-                ref={searchTerm}
-                className="form-control"
-                placeholder="Movie title.."
-                aria-label="Movie title.."
-                aria-describedby="button-addon2"
-              />
-              <button
-                className="btn btn-outline-secondary"
-                type="button"
-                id="button-addon2"
-                onClick={handleSearch}
-              >
-                Search
-              </button>
-            </div>
-          </form>
-
           <button
             className="btn btn-outline-danger nav-item ms-lg-2 mt-3 mt-lg-0"
             type="button"
