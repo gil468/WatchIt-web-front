@@ -3,14 +3,11 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import z from "zod";
-import "./shake.css";
-import FormInput, { FormInputProps } from "./FormInput";
-import { uploadPhoto } from "../../services/file-service";
-import { IUser, register } from "../../services/user-service";
-import EditProfileImage from "../EditProfileImage";
-import { IReview, createReview } from "../../services/review-service";
-// import { IUser, googleSignin, register } from "../../services/user-service";
-// import { CodeResponse, useGoogleLogin } from "@react-oauth/google";
+import "./auth/shake.css";
+import FormInput, { FormInputProps } from "./auth/FormInput";
+import { uploadPhoto } from "../services/file-service";
+import { IReview, createReview } from "../services/review-service";
+import EditReviewImage from "../components/EditReviewImage";
 
 const schema = z
   .object({
@@ -22,7 +19,7 @@ const schema = z
   })
   .refine(
     (values) => {
-      return !values.score;
+      return values.score;
     },
     {
       message: "Score can't be empty",
@@ -62,8 +59,7 @@ const EditProfile: React.FC = () => {
     mode: "onChange",
   });
 
-  // const initialImageUrl = "src/assets/react.svg";
-  const initialImageUrl = "public/images/apple.png";
+  const initialImageUrl = "../../public/images/addImage.png";
 
   const onSubmit = async ({ description, score, reviewPicture }: FormData) => {
     const imgUrl = await uploadPhoto(reviewPicture[0]);
@@ -92,14 +88,12 @@ const EditProfile: React.FC = () => {
         }}
       >
         <div className="text-center">
-          <h1>Edit My Profile</h1>
+          <h1>Create New Review</h1>
           <p className="text-muted mt-3">
-            Please edit your information below in order to update your profile
+            Please edit the fields below in order to upload new review
           </p>
 
-          {/* <img src="src/assets/react.svg"  alt="..."
-          style={{ maxWidth: '100%', width: '100px', height: '100px', maxHeight: '200px', marginBottom: '10px' }}></img> */}
-          <EditProfileImage imageUrl={initialImageUrl} />
+          <EditReviewImage imageUrl={initialImageUrl} />
         </div>
 
         <div
@@ -116,7 +110,7 @@ const EditProfile: React.FC = () => {
 
               <div className="text-center mt-4">
                 <button type="submit" className="btn btn-dark w-100 mx-auto">
-                  Update
+                  Upload
                 </button>
               </div>
             </form>

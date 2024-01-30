@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./ProfileImage.css";
+import "./Reviewimage.css";
 <link
   rel="stylesheet"
   href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
@@ -47,12 +47,10 @@ const EditableImage: React.FC<EditableImageProps> = ({ imageUrl }) => {
               <div className="image-container">
                 <img
                   src={newImageUrl}
-                  alt="Profile"
-                  style={{ maxWidth: "100px", maxHeight: "100px" }}
+                  style={{ maxWidth: "350px", maxHeight: "250px" }}
                 />
               </div>
               <button className="btn btn-link" onClick={handleEditClick}>
-                {/* <img src="src/assets/pencil.svg" /> */}
                 <i className="bi bi-pencil me-2 align-middle" style={{ color: "#000000" }}></i>
               </button>
             </div>

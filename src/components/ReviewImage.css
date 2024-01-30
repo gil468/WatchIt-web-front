@@ -1,0 +1,25 @@
+/* styles.css */
+.image-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .image-container img {
+    display: block;
+    border-radius: 30%;
+    overflow: hidden;
+  }
+  
+  /* Add a black circle around the borders */
+  .image-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 25%;
+    border: 2px solid black; /* Adjust the border width as needed */
+    box-sizing: border-box;
+  }
+  
