@@ -15,6 +15,7 @@ interface Movie {
 const Search: React.FC = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const searchTerm = useRef<HTMLInputElement>(null);
+  const [showPlaceholder, setShowPlaceholder] = useState(true);
 
   const handleClick = async (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
@@ -24,6 +25,7 @@ const Search: React.FC = () => {
       const moviesResult = await searchMovie(term);
       console.log(moviesResult);
       setMovies(moviesResult);
+      setShowPlaceholder(false);
     }
   };
 
@@ -31,7 +33,14 @@ const Search: React.FC = () => {
     <>
       <Navbar />
 
-      <form className="d-flex" style={{ paddingTop: "40px", paddingRight: "150px", paddingLeft: "150px" }}>
+      <form
+        className="d-flex"
+        style={{
+          paddingTop: "40px",
+          paddingRight: "150px",
+          paddingLeft: "150px",
+        }}
+      >
         <div className="input-group">
           <input
             type="text"
@@ -52,7 +61,20 @@ const Search: React.FC = () => {
         </div>
       </form>
 
-      <div className="row row-cols-1 row-cols-md-3 g-4" style={{ paddingTop: "50px", paddingRight: "50px", paddingLeft: "50px" }}>
+      <div className="text-center" style={{ paddingTop: "40px" }}>
+        {showPlaceholder && (
+          <p className="h4">Please insert movie title for results</p>
+        )}
+      </div>
+
+      <div
+        className="row row-cols-1 row-cols-md-3 g-4"
+        style={{
+          paddingTop: "10px",
+          paddingRight: "50px",
+          paddingLeft: "50px",
+        }}
+      >
         {movies.map((movie, index) => (
           <SearchCardResult key={index} {...movie} />
         ))}

@@ -1,7 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 interface ReviewCardProps {
+  reviewId: number;
   reviewerName: string;
   reviewerProfilePictureUrl: string;
   postedOn: Date;
@@ -12,10 +14,11 @@ interface ReviewCardProps {
   commentsCount: number;
   isLiked: boolean;
   likeReview(): void;
-  commentOnReview(): void;
+  commentOnReview(reviewId: number): void;
 }
 
 const ReviewCard: React.FC<ReviewCardProps> = ({
+  reviewId,
   reviewerName,
   reviewerProfilePictureUrl,
   postedOn,
@@ -28,6 +31,16 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   likeReview,
   commentOnReview,
 }) => {
+  const navigate = useNavigate();
+
+  const handleCommentClick = () => {
+    // Call the commentOnReview function passing the reviewId
+    commentOnReview(reviewId);
+
+    // Navigate to the "/comments/{reviewId}" route
+    navigate(`/comments/${reviewId}`);
+  };
+
   return (
     <div className="card w-50 mx-auto my-3 px-4 py-3">
       <div className="container px-0">
@@ -81,7 +94,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           <button
             type="button"
             className="btn btn-outline-dark"
-            onClick={commentOnReview}
+            onClick={handleCommentClick}
           >
             <i className="bi bi-chat me-2 align-middle"></i>
             Comment

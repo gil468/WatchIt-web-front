@@ -14,6 +14,9 @@ import Register from "./components/auth/Register.tsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Profile from "./components/Profile.tsx";
 import Search from "./components/Search.tsx";
+import Comments from "./components/Comments.tsx";
+import MyReviews from "./components/MyReviews.tsx";
+import NewReview from "./components/NewReview.tsx";
 
 const auzthorizedRouteLoader = () => {
   const token = localStorage.getItem("refresh_token");
@@ -61,6 +64,21 @@ const router = createBrowserRouter([
     path: "/search",
     // loader: auzthorizedRouteLoader,
     element: <Search />,
+  },
+  {
+    path: "/comments/:reviewId",
+    // loader: auzthorizedRouteLoader,
+    element: <Comments />,
+  },
+  {
+    path: "/myreviews",
+    // loader: auzthorizedRouteLoader,
+    element: <MyReviews />,
+  },
+  {
+    path: "/edit/review/:reviewId",
+    // loader: auzthorizedRouteLoader,
+    element: <NewReview />,
   },
 ]);
 

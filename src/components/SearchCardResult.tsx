@@ -13,9 +13,13 @@ const SearchCardResult: React.FC<SearchCardProps> = ({
   overview,
 }) => {
 
+  const handleAddReview = () => {
+    
+  };
+  
   return (
     <div className="col">
-      <div className="card border-dark h-100">
+      <div className="card text-bg-dark h-100">
         <div className="row g-0">
           <div className="col-md-4">
             <img
@@ -27,7 +31,11 @@ const SearchCardResult: React.FC<SearchCardProps> = ({
             <div className="card-body">
               <h5 className="card-title">{title}</h5>
               <p className="card-text">{overview}</p>
-              <button type="submit" className="btn btn-dark mx-auto d-flex justify-content-center">
+              <button
+                type="submit"
+                className="btn btn-outline-light mx-auto d-flex justify-content-center"
+                onClick={handleAddReview}
+              >
                 Write a review
               </button>
             </div>

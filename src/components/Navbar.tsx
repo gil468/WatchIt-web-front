@@ -1,7 +1,7 @@
 import React from "react";
 import { logout } from "../services/user-service";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -22,9 +22,9 @@ const Navbar: React.FC = () => {
           height="35"
           className="mx-2"
         />
-        <a className="navbar-brand" href="home">
+        <Link to="/home" className="navbar-brand">
           WatchIt!
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -39,19 +39,44 @@ const Navbar: React.FC = () => {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className={`nav-link ${location.pathname === '/home' ? 'active' : ''}`} aria-current="page" href="home">
+              <Link
+                to="/home"
+                className={`nav-link ${
+                  location.pathname === "/home" ? "active" : ""
+                }`}
+              >
                 Home
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className={`nav-link ${location.pathname === '/search' ? 'active' : ''}`} href="search">
+              <Link
+                to="/search"
+                className={`nav-link ${
+                  location.pathname === "/search" ? "active" : ""
+                }`}
+              >
                 Search
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
-              <a className={`nav-link ${location.pathname === '/profile' ? 'active' : ''}`} href="profile">
+              <Link
+                to="/profile"
+                className={`nav-link ${
+                  location.pathname === "/profile" ? "active" : ""
+                }`}
+              >
                 My Profile
-              </a>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                to="/myreviews"
+                className={`nav-link ${
+                  location.pathname === "/myreviews" ? "active" : ""
+                }`}
+              >
+                My Reviews
+              </Link>
             </li>
           </ul>
           <button

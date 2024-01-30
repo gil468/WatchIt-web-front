@@ -52,7 +52,8 @@ const EditableImage: React.FC<EditableImageProps> = ({ imageUrl }) => {
                 />
               </div>
               <button className="btn btn-link" onClick={handleEditClick}>
-                <img src="src/assets/pencil.svg" />
+                {/* <img src="src/assets/pencil.svg" /> */}
+                <i className="bi bi-pencil me-2 align-middle" style={{ color: "#000000" }}></i>
               </button>
             </div>
           </div>

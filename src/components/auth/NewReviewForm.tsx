@@ -8,35 +8,25 @@ import FormInput, { FormInputProps } from "./FormInput";
 import { uploadPhoto } from "../../services/file-service";
 import { IUser, register } from "../../services/user-service";
 import EditProfileImage from "../EditProfileImage";
+import { IReview, createReview } from "../../services/review-service";
 // import { IUser, googleSignin, register } from "../../services/user-service";
 // import { CodeResponse, useGoogleLogin } from "@react-oauth/google";
 
 const schema = z
   .object({
-    fullName: z
-      .string()
-      .regex(
-        /^[a-zA-Z]{2,}(?: [a-zA-Z]{2,}){1,3}$/,
-        "Please provide a vaild full name"
-      )
-      .min(1, "Full Name must not be empty")
-      .max(20, "Full Name must be less then 30 charecters"),
-    email: z.string().email("Email is invalid"),
-    password: z.string().min(5, "Password must contain at least 5 characters"),
-    confirmPassword: z
-      .string()
-      .min(5, "Password must contain at least 5 characters"),
-    profilePicture: z
+    description: z.string().min(1, "Description can't be empty"),
+    score: z.number().min(1).max(5),
+    reviewPicture: z
       .any()
-      .refine((val) => val.length > 0, "Profile picture is required"),
+      .refine((val) => val.length > 0, "Review picture is required"),
   })
   .refine(
     (values) => {
-      return values.password === values.confirmPassword;
+      return !values.score;
     },
     {
-      message: "Passwords must match!",
-      path: ["confirmPassword"],
+      message: "Score can't be empty",
+      path: ["score"],
     }
   );
 
@@ -44,31 +34,21 @@ type FormData = z.infer<typeof schema>;
 
 const inputFields: FormInputProps[] = [
   {
-    name: "profilePicture",
-    label: "Profile Picture",
+    name: "reviewPicture",
+    label: "Review Picture",
     type: "file",
   },
   {
-    name: "fullName",
-    label: "Full Name",
+    name: "score",
+    label: "Score",
+    type: "number",
+    placeholder: "4",
+  },
+  {
+    name: "description",
+    label: "Description",
     type: "text",
-    placeholder: "John Doe",
-  },
-  {
-    name: "email",
-    label: "Email",
-    type: "text",
-    placeholder: "a@example.com",
-  },
-  {
-    name: "password",
-    label: "Password",
-    type: "password",
-  },
-  {
-    name: "confirmPassword",
-    label: "Confirm Password",
-    type: "password",
+    placeholder: "Write your review here...",
   },
 ];
 
@@ -85,38 +65,22 @@ const EditProfile: React.FC = () => {
   // const initialImageUrl = "src/assets/react.svg";
   const initialImageUrl = "public/images/apple.png";
 
-  const onSubmit = async ({
-    fullName,
-    email,
-    password,
-    profilePicture,
-  }: FormData) => {
-    const imgUrl = await uploadPhoto(profilePicture[0]);
+  const onSubmit = async ({ description, score, reviewPicture }: FormData) => {
+    const imgUrl = await uploadPhoto(reviewPicture[0]);
 
-    const user: IUser = {
-      fullName,
-      email,
-      password,
+    const review: IReview = {
+      description,
+      score,
       imgUrl,
     };
 
-    await register(user);
-    navigate("/");
+    await createReview(review);
+    navigate("/home");
   };
 
   const onErrorSubmit = () => {
     setShake(true);
   };
-
-  // const onGoogleLoginSuccess = async (credentialResponse: CodeResponse) => {
-  //   await googleSignin(credentialResponse);
-  //   navigate("/");
-  // };
-
-  // const googleLogin = useGoogleLogin({
-  //   onSuccess: onGoogleLoginSuccess,
-  //   flow: "auth-code",
-  // });
 
   return (
     <div className="d-flex align-items-center justify-content-center py-2">

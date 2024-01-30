@@ -9,6 +9,7 @@ const Home: React.FC = () => {
       {Array.from({ length: 16 }, (_, id) => (
         <ReviewCard
           key={id}
+          reviewId={0}
           commentsCount={40}
           isLiked={false}
           likeCount={45}
