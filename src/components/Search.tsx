@@ -5,7 +5,7 @@ import { searchMovie } from "../services/movie-service";
 
 interface Movie {
   backdrop_path: string;
-  id: number;
+  movie_id: number;
   title: string;
   overview: string;
   popularity: number;

@@ -16,7 +16,7 @@ const Navbar: React.FC = () => {
     <nav className="navbar navbar-expand-lg bg-light">
       <div className="container-fluid">
         <img
-          src="../images/WatchIt!.png"
+          src="../../public/images/WatchIt!.png"
           alt="Logo"
           width="35"
           height="35"

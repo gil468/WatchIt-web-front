@@ -36,7 +36,7 @@ const MyReviewCard: React.FC<MyReviewCardProps> = ({
     // Call the commentOnReview function passing the reviewId
     editReview(reviewId);
 
-    navigate(`/edit/review/${reviewId}`);
+    navigate(`/edit/review/${reviewId}`, { state: { reviewId, reviewScore, reviewImageUrl, reviewText } });
   };
 
   return (

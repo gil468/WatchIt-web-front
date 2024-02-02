@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import "./ProfileImage.css";
+import "./css/ProfileImage.css";
 <link
   rel="stylesheet"
   href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
 />;
-interface EditableImageProps {
+interface EditaProfileImageProps {
   imageUrl: string;
 }
 
-const EditableImage: React.FC<EditableImageProps> = ({ imageUrl }) => {
+const EditaProfileImage: React.FC<EditaProfileImageProps> = ({ imageUrl }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newImageUrl, setNewImageUrl] = useState(imageUrl);
 
@@ -52,7 +52,6 @@ const EditableImage: React.FC<EditableImageProps> = ({ imageUrl }) => {
                 />
               </div>
               <button className="btn btn-link" onClick={handleEditClick}>
-                {/* <img src="src/assets/pencil.svg" /> */}
                 <i className="bi bi-pencil me-2 align-middle" style={{ color: "#000000" }}></i>
               </button>
             </div>
@@ -63,4 +62,4 @@ const EditableImage: React.FC<EditableImageProps> = ({ imageUrl }) => {
   );
 };
 
-export default EditableImage;
+export default EditaProfileImage;

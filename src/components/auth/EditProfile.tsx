@@ -82,8 +82,7 @@ const EditProfile: React.FC = () => {
     mode: "onChange",
   });
 
-  // const initialImageUrl = "src/assets/react.svg";
-  const initialImageUrl = "public/images/apple.png";
+  const initialImageUrl = "public/images/addImage.png";
 
   const onSubmit = async ({
     fullName,
@@ -107,16 +106,6 @@ const EditProfile: React.FC = () => {
   const onErrorSubmit = () => {
     setShake(true);
   };
-
-  // const onGoogleLoginSuccess = async (credentialResponse: CodeResponse) => {
-  //   await googleSignin(credentialResponse);
-  //   navigate("/");
-  // };
-
-  // const googleLogin = useGoogleLogin({
-  //   onSuccess: onGoogleLoginSuccess,
-  //   flow: "auth-code",
-  // });
 
   return (
     <div className="d-flex align-items-center justify-content-center py-2">
@@ -157,17 +146,6 @@ const EditProfile: React.FC = () => {
               </div>
             </form>
           </FormProvider>
-
-          {/* <div className="d-flex justify-content-center mt-2">
-            <button
-              type="submit"
-              className="btn btn-outline-dark w-100 mx-auto"
-              onClick={() => googleLogin()}
-            >
-              <i className="bi bi-google me-2" />
-              Sign Up With Google
-            </button>
-          </div> */}
         </div>
       </div>
     </div>

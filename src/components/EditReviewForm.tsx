@@ -7,12 +7,13 @@ import "./auth/shake.css";
 import FormInput, { FormInputProps } from "./auth/FormInput";
 import { uploadPhoto } from "../services/file-service";
 import { IReview, createReview } from "../services/review-service";
-import EditReviewImage from "../components/EditReviewImage";
+import EditReviewImage from "./EditReviewImage";
 
 interface NewReviewProps {
-  movie_id: number;
-  movie_title: string;
-  poster_path: string;
+  reviewId: number;
+  reviewScore: 1 | 2 | 3 | 4 | 5;
+  reviewImageUrl: string;
+  reviewText: string;
 }
 
 const schema = z
@@ -55,10 +56,11 @@ const inputFields: FormInputProps[] = [
   },
 ];
 
-const NewReviewForm: React.FC<NewReviewProps> = ({
-  movie_id,
-  movie_title,
-  poster_path,
+const EditReviewForm: React.FC<NewReviewProps> = ({
+  reviewId,
+  reviewScore,
+  reviewImageUrl,
+  reviewText,
 }) => {
   const navigate = useNavigate();
 
@@ -101,15 +103,15 @@ const NewReviewForm: React.FC<NewReviewProps> = ({
         }}
       >
         <div className="text-center">
-          <h1>Create New Review</h1>
+          <h1>Edit Review</h1>
           <p className="text-muted mt-3">
-            Please edit the fields below in order to upload new review
+            Please edit the fields below in order to update the review
           </p>
 
           <EditReviewImage imageUrl={initialImageUrl} />
         </div>
 
-        <p className="h6">Title: {movie_title}</p>
+        <p className="h6">Title: </p>
 
         <div
           className="overflow-auto"
@@ -136,4 +138,4 @@ const NewReviewForm: React.FC<NewReviewProps> = ({
   );
 };
 
-export default NewReviewForm;
+export default EditReviewForm;

@@ -14,7 +14,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postComment }) => {
   const handlePostComment = () => {
     if (comment.trim() !== "") {
       postComment(comment);
-      setComment(""); // Clear the input field after posting the comment
+      setComment("");
     }
   };
 
@@ -37,26 +37,6 @@ const CommentForm: React.FC<CommentFormProps> = ({ postComment }) => {
       </div>
     </div>
   );
-
-  //   return (
-  //     <div className="container text-center">
-  //       <div className="row">
-  //         <div className="col-10">
-  //           <input
-  //             className="form-control border-dark"
-  //             type="text"
-  //             value={comment}
-  //             onChange={handleInputChange}
-  //             placeholder="Enter your comment..."
-  //             aria-label="default input example"
-  //           />
-  //         </div>
-  //         <div className="col-1">
-  //           <button onClick={handlePostComment}>Post</button>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
 };
 
 export default CommentForm;

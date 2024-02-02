@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import "./Reviewimage.css";
+import "./css/Reviewimage.css";
 <link
   rel="stylesheet"
   href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
 />;
-interface EditableImageProps {
+interface EditReviewImageProps {
   imageUrl: string;
 }
 
-const EditableImage: React.FC<EditableImageProps> = ({ imageUrl }) => {
+const EditReviewImage: React.FC<EditReviewImageProps> = ({ imageUrl }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newImageUrl, setNewImageUrl] = useState(imageUrl);
 
@@ -61,4 +61,4 @@ const EditableImage: React.FC<EditableImageProps> = ({ imageUrl }) => {
   );
 };
 
-export default EditableImage;
+export default EditReviewImage;

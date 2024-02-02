@@ -17,6 +17,7 @@ import Search from "./components/Search.tsx";
 import Comments from "./components/Comments.tsx";
 import MyReviews from "./components/MyReviews.tsx";
 import NewReview from "./components/NewReview.tsx";
+import EditReview from "./components/EditReview.tsx";
 
 const auzthorizedRouteLoader = () => {
   const token = localStorage.getItem("refresh_token");
@@ -76,9 +77,14 @@ const router = createBrowserRouter([
     element: <MyReviews />,
   },
   {
-    path: "/edit/review/:reviewId",
+    path: "/review/:movieId",
     // loader: auzthorizedRouteLoader,
     element: <NewReview />,
+  },
+  {
+    path: "/edit/review/:reviewId",
+    // loader: auzthorizedRouteLoader,
+    element: <EditReview />,
   },
 ]);
 
