@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "./Navbar";
 import CommentCard from "./CommentCard";
-import { getComments } from "../services/comment-service";
+import { getCommentsByReviewId } from "../services/comment-service";
 import ReviewCard from "./ReviewCard";
 import CommentForm from "./CommentForm";
 
@@ -10,16 +10,18 @@ import CommentForm from "./CommentForm";
 //   reviewId: number;
 // }
 
-interface Comment {
-  userId: number;
-  reviewId: number;
-  userName: string;
+export interface IComment {
+  _id?: string;
   description: string;
-  timestamp: Date;
+  owner: string;
+  reviewId: string;
+  timeStamp: Date;
+  userFullName: string;
+  userImgUrl: string;
 }
 
 const Comments: React.FC = () => {
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [comments, setComments] = useState<IComment[]>([]);
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const { reviewId } = useParams<{ reviewId?: string }>();
@@ -33,8 +35,8 @@ const Comments: React.FC = () => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        if (reviewId !== null) {
-          const commentsResult = await getComments(Number(reviewId));
+        if (reviewId !== undefined) {
+          const commentsResult = await getCommentsByReviewId(reviewId);
           setComments(commentsResult);
           setDataLoaded(true);
         }

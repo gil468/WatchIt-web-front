@@ -20,10 +20,7 @@ export const register = (user: IUser) => {
     console.log(user);
     apiClient
       .post("/auth/register", user)
-      .then((response) => {
-        const { accessToken, refreshToken } = response.data;
-        localStorage.setItem("access_token", accessToken!);
-        localStorage.setItem("refresh_token", refreshToken!);
+      .then(() => {
         resolve();
       })
       .catch((error) => {
@@ -59,6 +56,23 @@ export const logout = () => {
       .then(() => {
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
+        resolve();
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
+export const refresh = () => {
+  return new Promise<void>((resolve, reject) => {
+    apiClient
+      .get("/auth/refresh")
+      .then((response) => {
+        const { accessToken, refreshToken } = response.data;
+        localStorage.setItem("access_token", accessToken!);
+        localStorage.setItem("refresh_token", refreshToken!);
         resolve();
       })
       .catch((error) => {
