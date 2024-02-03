@@ -1,27 +1,33 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { IComment } from "./Comments";
+import { format } from "date-fns";
 
 interface MyReviewCardProps {
-  reviewId: number;
-  reviewerName: string;
-  reviewerProfilePictureUrl: string;
-  postedOn: Date;
-  reviewScore: 1 | 2 | 3 | 4 | 5;
-  reviewImageUrl: string;
-  reviewText: string;
+  _id: string;
+  movieTitle: string;
+  description: string;
+  score: number;
+  reviewImgUrl: string;
+  timeStamp: Date;
+  owner: string;
+  userFullName: string;
+  userImgUrl: string;
   editReview(reviewId: number): void;
   deleteReview(reviewId: number): void;
 }
 
 const MyReviewCard: React.FC<MyReviewCardProps> = ({
-  reviewId,
-  reviewerName,
-  reviewerProfilePictureUrl,
-  postedOn,
-  reviewScore,
-  reviewImageUrl,
-  reviewText,
+  _id,
+  movieTitle,
+  description,
+  score,
+  reviewImgUrl,
+  timeStamp,
+  owner,
+  userFullName,
+  userImgUrl,
   editReview,
   deleteReview,
 }) => {
@@ -29,14 +35,16 @@ const MyReviewCard: React.FC<MyReviewCardProps> = ({
 
   const handleDeleteClick = () => {
     // Call the commentOnReview function passing the reviewId
-    deleteReview(reviewId);
+    deleteReview(_id);
   };
 
   const handleEditClick = () => {
     // Call the commentOnReview function passing the reviewId
-    editReview(reviewId);
+    editReview(_id);
 
-    navigate(`/edit/review/${reviewId}`, { state: { reviewId, reviewScore, reviewImageUrl, reviewText } });
+    navigate(`/edit/review/${_id}`, {
+      state: { _id, score, reviewImgUrl, description },
+    });
   };
 
   return (
@@ -49,33 +57,35 @@ const MyReviewCard: React.FC<MyReviewCardProps> = ({
               className="rounded-circle ms-0 me-2"
               height="50"
               width="50"
-              src={reviewerProfilePictureUrl}
+              src={userImgUrl}
             />
 
-            <p className="h5 my-0">{reviewerName}</p>
+            <p className="h5 my-0">{userFullName}</p>
           </div>
           <small className="my-0 text-muted">
-            {`${postedOn.toLocaleDateString()} ${postedOn.toLocaleTimeString()}`}
+            {/* {`${postedOn.toLocaleDateString()} ${postedOn.toLocaleTimeString()}`} */}
+            {/* {`${format(new Date(timeStamp), "dd/MM/yyyy HH:mm:ss")}`} */}
           </small>
         </div>
       </div>
       <img
-        src={reviewImageUrl}
+        src={reviewImgUrl}
         className="card-img-top mt-2"
         height="200"
         style={{ backgroundColor: "#e3f2fd" }}
       />
       <div className="card-body ps-0">
+        <p className="h5 my-0">Title: {movieTitle}</p>
         <span className="fw-bold me-2">Score:</span>
-        {Array.from({ length: reviewScore }, (_) => (
+        {Array.from({ length: score }, (_) => (
           <i className="bi bi-star-fill me-1" style={{ color: "#ecc94b" }} />
         ))}
 
-        {Array.from({ length: 5 - reviewScore }, (_) => (
+        {Array.from({ length: 5 - score }, (_) => (
           <i className="bi bi-star me-1" style={{ color: "#ecc94b" }} />
         ))}
 
-        <p className="card-text mt-2">{reviewText}</p>
+        <p className="card-text mt-2">{description}</p>
       </div>
       <div className="text-center py-3">
         <div className="d-flex justify-content-center gap-3">

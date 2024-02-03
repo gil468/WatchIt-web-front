@@ -3,12 +3,9 @@ import { useParams } from "react-router-dom";
 import Navbar from "./Navbar";
 import CommentCard from "./CommentCard";
 import { getCommentsByReviewId } from "../services/comment-service";
-import ReviewCard from "./ReviewCard";
 import CommentForm from "./CommentForm";
-
-// interface CommentsProps {
-//   reviewId: number;
-// }
+import CommentReviewCard from "./CommentReviewCard";
+import { IReview, getReviewById } from "../services/review-service";
 
 export interface IComment {
   _id?: string;
@@ -21,16 +18,30 @@ export interface IComment {
 }
 
 const Comments: React.FC = () => {
+  const [review, setReview] = useState<IReview[]>([]);
   const [comments, setComments] = useState<IComment[]>([]);
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  const { reviewId } = useParams<{ reviewId?: string }>();
+  const { reviewId } = useParams<{ reviewId: string }>();
+
+  useEffect(() => {
+    const fetchReview = async () => {
+      try {
+        if (reviewId !== undefined) {
+          const review = await getReviewById(reviewId);
+          setReview(review);
+        }
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      }
+    };
+
+    fetchReview();
+  }, [reviewId]);
 
   const postComment = (comment: string) => {
-    // Your logic to post the comment (e.g., make an API call)
     console.log(`Posting comment: ${comment}`);
   };
-
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -53,20 +64,7 @@ const Comments: React.FC = () => {
   return (
     <>
       <Navbar />
-      <ReviewCard
-          reviewId={Number(reviewId)}
-          commentsCount={40}
-          isLiked={false}
-          likeCount={45}
-          postedOn={new Date()}
-          reviewScore={4}
-          reviewImageUrl="https://generated.vusercontent.net/placeholder.svg"
-          reviewText="The best movie EVER!!!!!"
-          reviewerName="Oren Eyal"
-          reviewerProfilePictureUrl="https://generated.vusercontent.net/placeholder.svg"
-          likeReview={() => {}}
-          commentOnReview={() => {}}
-        />
+      <CommentReviewCard {...review}/>
       <div
         className="row row-cols-1 row-cols"
         style={{
@@ -75,15 +73,18 @@ const Comments: React.FC = () => {
           paddingLeft: "50px",
         }}
       >
-        <CommentForm postComment={postComment} />
-        <p className="h2" style={{paddingTop: "30px"}}>Comments</p>
-        {/* {comments.map((comment, index) => (
+        <CommentForm reviewId={reviewId} />
+        <p className="h2" style={{ paddingTop: "30px" }}>
+          Comments
+        </p>
+        {comments.map((comment, index) => (
           <CommentCard key={index} {...comment} />
-        ))} */}
-        <CommentCard userName={"Gil Segev"} description={"Very good movie!!!"} timestamp={"30.1.2024 14:29:34"}/>
-        <CommentCard userName={"Gil Segev"} description={"Very good movie!!!"} timestamp={"30.1.2024 14:29:34"}/>
-        <CommentCard userName={"Gil Segev"} description={"Very good movie!!!"} timestamp={"30.1.2024 14:29:34"}/>
-
+        ))}
+        {/* <CommentCard
+          userName={"Gil Segev"}
+          description={"Very good movie!!!"}
+          timestamp={"30.1.2024 14:29:34"}
+        /> */}
       </div>
     </>
   );

@@ -10,9 +10,8 @@ import { IReview, createReview } from "../services/review-service";
 import EditReviewImage from "../components/EditReviewImage";
 
 interface NewReviewProps {
-  movie_id: number;
-  movie_title: string;
-  poster_path: string;
+  movieId: number;
+  movieTitle: string;
 }
 
 const schema = z
@@ -56,9 +55,8 @@ const inputFields: FormInputProps[] = [
 ];
 
 const NewReviewForm: React.FC<NewReviewProps> = ({
-  movie_id,
-  movie_title,
-  poster_path,
+  movieId,
+  movieTitle,
 }) => {
   const navigate = useNavigate();
 
@@ -74,10 +72,11 @@ const NewReviewForm: React.FC<NewReviewProps> = ({
   // console.log(initialImageUrl)
   // console.log({poster_path})
 
-  const onSubmit = async ({ description, score, reviewPicture }: FormData) => {
+  const onSubmit = async ({ description, score, reviewPicture, movieTitle }: FormData) => {
     const imgUrl = await uploadPhoto(reviewPicture[0]);
 
     const review: IReview = {
+      movieTitle,
       description,
       score,
       imgUrl,
@@ -109,7 +108,7 @@ const NewReviewForm: React.FC<NewReviewProps> = ({
           <EditReviewImage imageUrl={initialImageUrl} />
         </div>
 
-        <p className="h6">Title: {movie_title}</p>
+        <p className="h6">Title: {movieTitle}</p>
 
         <div
           className="overflow-auto"

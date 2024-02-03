@@ -6,12 +6,12 @@ import { useLocation } from 'react-router-dom';
 
 const NewReview: React.FC = () => {
   const location = useLocation();
-  const { movie_id, title, poster_path } = location.state;
+  const { movie_id, title } = location.state;
 
   return (
     <>
       <Navbar />
-      <NewReviewForm movie_id={movie_id} movie_title={title} poster_path={poster_path} />
+      <NewReviewForm movieId={movie_id} movieTitle={title} />
     </>
   );
 };

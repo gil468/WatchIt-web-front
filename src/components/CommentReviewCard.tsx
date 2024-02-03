@@ -1,10 +1,9 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { IComment } from "./Comments";
 import { format } from "date-fns";
 
-interface ReviewCardProps {
+interface CommentReviewCardProps {
   _id: string;
   movieTitle: string;
   description: string;
@@ -20,7 +19,7 @@ interface ReviewCardProps {
   comments?: IComment[];
 }
 
-const ReviewCard: React.FC<ReviewCardProps> = ({
+const CommentReviewCard: React.FC<CommentReviewCardProps> = ({
   _id,
   movieTitle,
   description,
@@ -30,20 +29,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   owner,
   userFullName,
   userImgUrl,
-  likesCount,
-  commentsCount,
-  isLiked,
 }) => {
-  const navigate = useNavigate();
-
-  const handleCommentClick = () => {
-    navigate(`/comments/${_id}`);
-  };
-
-  const handleLikeClick = () => {
-
-  };
-
   return (
     <div className="card w-50 mx-auto my-3 px-4 py-3">
       <div className="container px-0">
@@ -60,7 +46,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             <p className="h5 my-0">{userFullName}</p>
           </div>
           <small className="my-0 text-muted">
-            {`${format(new Date(timeStamp), "dd/MM/yyyy HH:mm:ss")}`}
+          {/* {`${format(new Date(timeStamp), "dd/MM/yyyy HH:mm:ss")}`} */}
           </small>
         </div>
       </div>
@@ -83,32 +69,8 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
 
         <p className="card-text mt-2">{description}</p>
       </div>
-      <div className="text-center py-3">
-        <div className="d-flex justify-content-center gap-3">
-          <button
-            type="button"
-            className={`btn ${(isLiked && "btn-dark") || "btn-outline-dark"}`}
-            onClick={handleLikeClick}
-          >
-            <i className="bi bi-heart me-2 align-middle"></i>
-            Like
-            <div className="vr mx-2 align-middle"></div>
-            {likesCount}
-          </button>
-          <button
-            type="button"
-            className="btn btn-outline-dark"
-            onClick={handleCommentClick}
-          >
-            <i className="bi bi-chat me-2 align-middle"></i>
-            Comment
-            <div className="vr mx-2 align-middle"></div>
-            {commentsCount}
-          </button>
-        </div>
-      </div>
     </div>
   );
 };
 
-export default ReviewCard;
+export default CommentReviewCard;

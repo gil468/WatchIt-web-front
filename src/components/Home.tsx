@@ -1,12 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import ReviewCard from "./ReviewCard";
+import { IReview, getAllReviews } from "../services/review-service";
 
 const Home: React.FC = () => {
+  const [reviews, setReviews] = useState<IReview[]>([]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const reviews = await getAllReviews();
+        setReviews(reviews);
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      }
+    };
+
+    fetchReviews();
+  }, []);
+
   return (
     <>
       <Navbar />
-      {Array.from({ length: 16 }, (_, id) => (
+      {reviews.map((review, index) => (
+        <ReviewCard key={index} {...review} />
+      ))}
+      {/* {Array.from({ length: 16 }, (_, id) => (
         <ReviewCard
           key={id}
           reviewId={0}
@@ -22,7 +41,7 @@ const Home: React.FC = () => {
           likeReview={() => {}}
           commentOnReview={() => {}}
         />
-      ))}
+      ))} */}
     </>
   );
 };
