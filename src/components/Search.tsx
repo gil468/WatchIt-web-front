@@ -5,7 +5,7 @@ import { searchMovie } from "../services/movie-service";
 
 interface Movie {
   backdrop_path: string;
-  movie_id: number;
+  id: number;
   title: string;
   overview: string;
   popularity: number;
@@ -17,8 +17,8 @@ const Search: React.FC = () => {
   const searchTerm = useRef<HTMLInputElement>(null);
   const [showPlaceholder, setShowPlaceholder] = useState(true);
 
-  const handleClick = async (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
+  const search = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     const term = searchTerm.current?.value;
 
     if (term) {
@@ -32,9 +32,9 @@ const Search: React.FC = () => {
   return (
     <>
       <Navbar />
-
       <form
         className="d-flex"
+        onSubmit={search}
         style={{
           paddingTop: "40px",
           paddingRight: "150px",
@@ -50,12 +50,7 @@ const Search: React.FC = () => {
             aria-label="Movie title..."
             aria-describedby="button-addon2"
           />
-          <button
-            className="btn btn-outline-primary"
-            type="button"
-            id="button-addon2"
-            onClick={handleClick}
-          >
+          <button className="btn btn-dark" type="submit" id="button-addon2">
             Search
           </button>
         </div>
@@ -68,7 +63,7 @@ const Search: React.FC = () => {
       </div>
 
       <div
-        className="row row-cols-1 row-cols-md-3 g-4"
+        className="row row-cols-1 row-cols-md-3 g-4 mw-100"
         style={{
           paddingTop: "10px",
           paddingRight: "50px",

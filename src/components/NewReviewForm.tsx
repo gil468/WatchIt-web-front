@@ -54,10 +54,7 @@ const inputFields: FormInputProps[] = [
   },
 ];
 
-const NewReviewForm: React.FC<NewReviewProps> = ({
-  movieId,
-  movieTitle,
-}) => {
+const NewReviewForm: React.FC<NewReviewProps> = ({ movieId, movieTitle }) => {
   const navigate = useNavigate();
 
   const [shake, setShake] = useState(false);
@@ -72,14 +69,14 @@ const NewReviewForm: React.FC<NewReviewProps> = ({
   // console.log(initialImageUrl)
   // console.log({poster_path})
 
-  const onSubmit = async ({ description, score, reviewPicture, movieTitle }: FormData) => {
+  const onSubmit = async ({ description, score, reviewPicture }: FormData) => {
     const imgUrl = await uploadPhoto(reviewPicture[0]);
 
     const review: IReview = {
       movieTitle,
       description,
       score,
-      imgUrl,
+      reviewImgUrl: imgUrl,
     };
 
     await createReview(review);

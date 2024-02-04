@@ -2,7 +2,7 @@ import apiClient from "./api-client";
 
 export interface Movie {
   backdrop_path: string;
-  movie_id: number;
+  id: number;
   title: string;
   overview: string;
   popularity: number;

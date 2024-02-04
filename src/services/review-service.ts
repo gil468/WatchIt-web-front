@@ -7,13 +7,14 @@ export interface IReview {
   description: string;
   score: number;
   reviewImgUrl: string;
-  timeStamp: Date;
-  owner: string;
-  userFullName: string;
-  userImgUrl: string;
-  commentsCount: number;
-  likesCount: number;
-  isLiked: object[];
+  timeStamp?: Date;
+  author?: {
+    fullName: string;
+    imgUrl: string;
+  };
+  commentsCount?: number;
+  likesCount?: number;
+  isLiked?: boolean;
   comments?: IComment[];
 }
 
@@ -24,7 +25,8 @@ export const getAllReviews = () => {
       .then((response) => {
         const reviews = (response.data as IReview[]).sort((a, b) => {
           return (
-            new Date(b.timeStamp).getTime() - new Date(a.timeStamp).getTime()
+            new Date(b.timeStamp || 0).getTime() -
+            new Date(a.timeStamp || 0).getTime()
           );
         });
         resolve(reviews);
@@ -41,7 +43,7 @@ export const getReviewById = (review_id: string) => {
     apiClient
       .get(`/reviews/${review_id}`)
       .then((response) => {
-        const reviews = (response.data as IReview[]);
+        const reviews = response.data as IReview[];
         resolve(reviews);
       })
       .catch((error) => {
@@ -76,7 +78,7 @@ export const createReview = (review: IReview) => {
     console.log("Creating review...");
     console.log(review);
     apiClient
-      .post("/reviews/", review)
+      .post("/reviews", review)
       .then(() => {
         resolve();
       })

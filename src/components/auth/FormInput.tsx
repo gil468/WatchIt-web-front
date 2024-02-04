@@ -24,7 +24,7 @@ const FormInput: React.FC<FormInputProps> = ({
     <div className={`mb-${(errors[name] && "0") || "3"} has-validation`}>
       <label htmlFor={name}>{label}:</label>
       <input
-        {...register(name)}
+        {...register(name, { valueAsNumber: type === "number" })}
         type={type}
         id={name}
         placeholder={placeholder}

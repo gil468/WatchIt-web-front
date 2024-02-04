@@ -27,7 +27,6 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   score,
   reviewImgUrl,
   timeStamp,
-  owner,
   userFullName,
   userImgUrl,
   likesCount,
@@ -40,9 +39,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     navigate(`/comments/${_id}`);
   };
 
-  const handleLikeClick = () => {
-
-  };
+  const handleLikeClick = () => {};
 
   return (
     <div className="card w-50 mx-auto my-3 px-4 py-3">
@@ -71,7 +68,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
         style={{ backgroundColor: "#e3f2fd" }}
       />
       <div className="card-body ps-0">
-        <p className="h5 my-0">Title: {movieTitle}</p>
+        <p className="h5 my-0">Movie Title: {movieTitle}</p>
         <span className="fw-bold me-2">Score:</span>
         {Array.from({ length: score }, (_) => (
           <i className="bi bi-star-fill me-1" style={{ color: "#ecc94b" }} />
@@ -93,7 +90,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             <i className="bi bi-heart me-2 align-middle"></i>
             Like
             <div className="vr mx-2 align-middle"></div>
-            {likesCount}
+            {likesCount || 0}
           </button>
           <button
             type="button"
@@ -103,7 +100,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             <i className="bi bi-chat me-2 align-middle"></i>
             Comment
             <div className="vr mx-2 align-middle"></div>
-            {commentsCount}
+            {commentsCount || 0}
           </button>
         </div>
       </div>

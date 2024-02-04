@@ -23,7 +23,12 @@ const Home: React.FC = () => {
     <>
       <Navbar />
       {reviews.map((review, index) => (
-        <ReviewCard key={index} {...review} />
+        <ReviewCard
+          key={index}
+          {...review}
+          userFullName={review.author?.fullName!}
+          userImgUrl={review.author?.imgUrl!}
+        />
       ))}
       {/* {Array.from({ length: 16 }, (_, id) => (
         <ReviewCard

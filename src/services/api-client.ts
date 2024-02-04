@@ -4,39 +4,10 @@ export { CanceledError };
 
 const baseURL = "http://localhost:3000";
 
-export const unauthorizedApiClient = axios.create({
-  baseURL: baseURL,
-});
-
-export const refreshTokenApiClient = axios.create({
-  baseURL: baseURL,
-});
-
-refreshTokenApiClient.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("refresh_token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
 const apiClient = axios.create({
   baseURL: baseURL,
+  withCredentials: true,
 });
-
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
 
 apiClient.interceptors.response.use(
   (response) => response,
@@ -47,17 +18,11 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const response = await refreshTokenApiClient.get("/auth/refresh");
-        const newTokens = response.data;
-
-        localStorage.setItem("access_token", newTokens.accessToken);
-        localStorage.setItem("refresh_token", newTokens.refreshToken);
-
-        originalRequest.headers.Authorization = `Bearer ${newTokens.accessToken}`;
-        return axios(originalRequest);
+        await apiClient.get("/auth/refresh");
+        return await axios(originalRequest);
       } catch (error) {
-        console.log("error", error);
-        window.location.href = "/login";
+        //window.location.href = "/login";
+        console.log("Error: ", error);
       }
     }
 

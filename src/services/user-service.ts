@@ -1,8 +1,5 @@
-import { CodeResponse, CredentialResponse } from "@react-oauth/google";
-import apiClient, {
-  refreshTokenApiClient,
-  unauthorizedApiClient,
-} from "./api-client";
+import { CodeResponse } from "@react-oauth/google";
+import apiClient from "./api-client";
 
 export interface IUser {
   fullName?: string;
@@ -10,8 +7,6 @@ export interface IUser {
   password?: string;
   imgUrl?: string;
   _id?: string;
-  accessToken?: string;
-  refreshToken?: string;
 }
 
 export const register = (user: IUser) => {
@@ -34,12 +29,9 @@ export const login = (user: IUser) => {
   return new Promise<void>((resolve, reject) => {
     console.log("user singing in...");
     console.log(user);
-    unauthorizedApiClient
+    apiClient
       .post("/auth/login", user)
-      .then((response) => {
-        const { accessToken, refreshToken } = response.data;
-        localStorage.setItem("access_token", accessToken!);
-        localStorage.setItem("refresh_token", refreshToken!);
+      .then(() => {
         resolve();
       })
       .catch((error) => {
@@ -51,11 +43,9 @@ export const login = (user: IUser) => {
 
 export const logout = () => {
   return new Promise<void>((resolve, reject) => {
-    refreshTokenApiClient
+    apiClient
       .get("/auth/logout")
       .then(() => {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
         resolve();
       })
       .catch((error) => {
@@ -69,10 +59,7 @@ export const refresh = () => {
   return new Promise<void>((resolve, reject) => {
     apiClient
       .get("/auth/refresh")
-      .then((response) => {
-        const { accessToken, refreshToken } = response.data;
-        localStorage.setItem("access_token", accessToken!);
-        localStorage.setItem("refresh_token", refreshToken!);
+      .then(() => {
         resolve();
       })
       .catch((error) => {
@@ -87,28 +74,7 @@ export const googleSignin = (credentialResponse: CodeResponse) => {
     console.log("googleSignin ...", credentialResponse);
     apiClient
       .post("/auth/google", credentialResponse)
-      .then((response) => {
-        const { accessToken, refreshToken } = response.data;
-        localStorage.setItem("access_token", accessToken!);
-        localStorage.setItem("refresh_token", refreshToken!);
-        resolve();
-      })
-      .catch((error) => {
-        console.log(error);
-        reject(error);
-      });
-  });
-};
-
-export const googleSignin2 = (credentialResponse: CredentialResponse) => {
-  return new Promise<void>((resolve, reject) => {
-    console.log("googleSignin ...", credentialResponse);
-    apiClient
-      .post("/auth/google", credentialResponse)
-      .then((response) => {
-        const { accessToken, refreshToken } = response.data;
-        localStorage.setItem("access_token", accessToken!);
-        localStorage.setItem("refresh_token", refreshToken!);
+      .then(() => {
         resolve();
       })
       .catch((error) => {

@@ -2,14 +2,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 interface SearchCardProps {
-  movie_id: number;
+  id: number;
   title: string;
   poster_path: string;
   overview: string;
 }
 
 const SearchCardResult: React.FC<SearchCardProps> = ({
-  movie_id,
+  id,
   title,
   poster_path,
   overview,
@@ -17,8 +17,9 @@ const SearchCardResult: React.FC<SearchCardProps> = ({
   const navigate = useNavigate();
 
   const handleAddReview = () => {
-    navigate(`/review/${movie_id}`, {
-      state: { movie_id, title, poster_path },
+    console.log("Add review for movie:", id);
+    navigate(`/addReview`, {
+      state: { id, title, poster_path },
     });
   };
 
