@@ -1,8 +1,7 @@
 import React from "react";
-import Navbar from "./Navbar";
-import { useLocation } from 'react-router-dom';
+import Navbar from "../Navbar";
+import { useLocation } from "react-router-dom";
 import EditReviewForm from "./EditReviewForm";
-
 
 const EditReview: React.FC = () => {
   const location = useLocation();
@@ -11,7 +10,12 @@ const EditReview: React.FC = () => {
   return (
     <>
       <Navbar />
-      <EditReviewForm reviewId={reviewId} reviewScore={reviewScore} reviewImageUrl={reviewImageUrl} reviewText={reviewText} />
+      <EditReviewForm
+        reviewId={reviewId}
+        reviewScore={reviewScore}
+        reviewImageUrl={reviewImageUrl}
+        reviewText={reviewText}
+      />
     </>
   );
 };

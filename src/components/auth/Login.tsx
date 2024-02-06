@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import z from "zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import FormInput, { FormInputProps } from "./FormInput";
+import FormInput, { FormInputProps } from "../form/FormInput";
 import { googleSignin, login } from "../../services/user-service";
 import { CodeResponse, useGoogleLogin } from "@react-oauth/google";
 

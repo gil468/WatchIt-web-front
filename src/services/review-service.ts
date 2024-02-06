@@ -1,4 +1,5 @@
 import apiClient from "./api-client";
+import { Comment } from "./comment-service";
 
 export interface ReviewSubmition {
   movieTitle: string;
@@ -14,8 +15,8 @@ export interface Review extends ReviewSubmition {
     fullName: string;
     imgUrl: string;
   };
-  commentsCount: number;
-  likesCount: number;
+  comments: [Comment];
+  likes: number;
   isLiked: boolean;
 }
 
@@ -34,12 +35,12 @@ export const getAllReviews = () => {
 };
 
 export const getReviewById = (reviewId: string) => {
-  return new Promise<Review[]>((resolve, reject) => {
+  return new Promise<Review>((resolve, reject) => {
     apiClient
       .get(`/reviews/${reviewId}`)
       .then((response) => {
-        const reviews = response.data as Review[];
-        resolve(reviews);
+        const review = response.data as Review;
+        resolve(review);
       })
       .catch((error) => {
         console.log("error in getting specific review: ", error);

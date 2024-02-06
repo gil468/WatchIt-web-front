@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
-import Navbar from "./Navbar";
+import Navbar from "../Navbar";
 import SearchCardResult from "./SearchCardResult";
-import { searchMovie } from "../services/movie-service";
+import { searchMovie } from "../../services/movie-service";
 
 interface Movie {
   backdrop_path: string;

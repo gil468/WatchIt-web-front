@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import z from "zod";
-import FormInput, { FormInputProps } from "./auth/FormInput";
-import { uploadPhoto } from "../services/file-service";
-import { ReviewSubmition, createReview } from "../services/review-service";
-import { Movie, getMovieById } from "../services/movie-service";
-import Navbar from "./Navbar";
-import FormTextArea from "./auth/FormTextArea";
-import FormInputImage from "./auth/FormInputFile";
+import FormInput, { FormInputProps } from "../form/FormInput";
+import { uploadPhoto } from "../../services/file-service";
+import { ReviewSubmition, createReview } from "../../services/review-service";
+import { Movie, getMovieById } from "../../services/movie-service";
+import Navbar from "../Navbar";
+import FormTextArea from "../form/FormTextArea";
+import FormInputImage from "../form/FormInputFile";
 
 const schema = z
   .object({
@@ -32,11 +32,6 @@ const schema = z
 type FormData = z.infer<typeof schema>;
 
 const inputFields: FormInputProps[] = [
-  // {
-  //   name: "reviewPicture",
-  //   label: "Review Picture",
-  //   type: "file",
-  // },
   {
     name: "score",
     label: "Score",

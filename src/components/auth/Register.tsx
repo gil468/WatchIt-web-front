@@ -3,11 +3,11 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import z from "zod";
-import FormInput, { FormInputProps } from "./FormInput";
+import FormInput, { FormInputProps } from "../form/FormInput";
 import { uploadPhoto } from "../../services/file-service";
 import { IUser, googleSignin, register } from "../../services/user-service";
 import { CodeResponse, useGoogleLogin } from "@react-oauth/google";
-import FormInputImage from "./FormInputFile";
+import FormInputImage from "../form/FormInputFile";
 
 const schema = z
   .object({

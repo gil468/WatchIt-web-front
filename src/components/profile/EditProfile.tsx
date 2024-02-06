@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import z from "zod";
-import FormInput, { FormInputProps } from "./auth/FormInput";
-import { uploadPhoto } from "../services/file-service";
-import { IUser, getMyUserData, update } from "../services/user-service";
-import FormInputImage from "./auth/FormInputFile";
+import FormInput, { FormInputProps } from "../form/FormInput";
+import { uploadPhoto } from "../../services/file-service";
+import { IUser, getMyUserData, update } from "../../services/user-service";
+import FormInputImage from "../form/FormInputFile";
 
 const schema = z.object({
   fullName: z

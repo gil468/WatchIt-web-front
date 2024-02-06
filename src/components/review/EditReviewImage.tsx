@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./css/Reviewimage.css";
+import "./../css/Reviewimage.css";
 <link
   rel="stylesheet"
   href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
@@ -51,7 +51,10 @@ const EditReviewImage: React.FC<EditReviewImageProps> = ({ imageUrl }) => {
                 />
               </div>
               <button className="btn btn-link" onClick={handleEditClick}>
-                <i className="bi bi-pencil me-2 align-middle" style={{ color: "#000000" }}></i>
+                <i
+                  className="bi bi-pencil me-2 align-middle"
+                  style={{ color: "#000000" }}
+                ></i>
               </button>
             </div>
           </div>

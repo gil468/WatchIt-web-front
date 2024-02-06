@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "./Navbar";
-import ReviewCard from "./ReviewCard";
+import Navbar from "../Navbar";
+import ReviewCard from "../review/ReviewCard";
 import {
   Review,
   getAllReviews,
   likeReview,
   unlikeReview,
-} from "../services/review-service";
+} from "../../services/review-service";
 
-const Home: React.FC = () => {
+const Feed: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
@@ -30,8 +30,8 @@ const Home: React.FC = () => {
       if (review.id === reviewId) {
         return {
           ...review,
+          likes: review.likes + 1,
           isLiked: true,
-          likesCount: review.likesCount + 1,
         };
       }
       return review;
@@ -45,8 +45,8 @@ const Home: React.FC = () => {
       if (review.id === reviewId) {
         return {
           ...review,
+          likes: review.likes - 1,
           isLiked: false,
-          likesCount: review.likesCount - 1,
         };
       }
       return review;
@@ -70,4 +70,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Feed;

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { IComment } from "./Comments";
+import { IComment } from "../comment/Comments";
 import { format } from "date-fns";
 
 interface MyReviewCardProps {

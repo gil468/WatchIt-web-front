@@ -1,35 +1,41 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { IComment } from "./Comments";
 import { format } from "date-fns";
+import { Review } from "../../services/review-service";
+import LikeAndCommentReview from "./LikeAndCommentReview";
 
-interface CommentReviewCardProps {
-  _id: string;
-  movieTitle: string;
-  description: string;
-  score: number;
-  reviewImgUrl: string;
-  timeStamp: Date;
-  owner: string;
-  userFullName: string;
-  userImgUrl: string;
-  commentsCount: number;
-  likesCount: number;
-  isLiked: object[];
-  comments?: IComment[];
+interface ReviewCardProps extends Review {
+  likeReview?: () => void;
+  unlikeReview?: () => void;
+  showLikesAndComments: boolean;
 }
 
-const CommentReviewCard: React.FC<CommentReviewCardProps> = ({
-  _id,
+const ReviewCard: React.FC<ReviewCardProps> = ({
+  id,
   movieTitle,
   description,
   score,
   reviewImgUrl,
   timeStamp,
-  owner,
-  userFullName,
-  userImgUrl,
+  author,
+  likes,
+  comments,
+  isLiked,
+  showLikesAndComments,
+  likeReview,
+  unlikeReview,
 }) => {
+  const navigate = useNavigate();
+
+  const handleCommentClick = () => {
+    navigate(`/comments/${id}`);
+  };
+
+  const handleLikeClick = () => {
+    isLiked ? unlikeReview!() : likeReview!();
+  };
+
   return (
     <div className="card w-50 mx-auto my-3 px-4 py-3">
       <div className="container px-0">
@@ -40,13 +46,13 @@ const CommentReviewCard: React.FC<CommentReviewCardProps> = ({
               className="rounded-circle ms-0 me-2"
               height="50"
               width="50"
-              src={userImgUrl}
+              src={author?.imgUrl}
             />
 
-            <p className="h5 my-0">{userFullName}</p>
+            <p className="h5 my-0">{author?.fullName}</p>
           </div>
           <small className="my-0 text-muted">
-          {/* {`${format(new Date(timeStamp), "dd/MM/yyyy HH:mm:ss")}`} */}
+            {`${format(new Date(timeStamp || 0), "dd/MM/yyyy HH:mm:ss")}`}
           </small>
         </div>
       </div>
@@ -57,7 +63,7 @@ const CommentReviewCard: React.FC<CommentReviewCardProps> = ({
         style={{ backgroundColor: "#e3f2fd" }}
       />
       <div className="card-body ps-0">
-        <p className="h5 my-0">Title: {movieTitle}</p>
+        <p className="h5 my-0">Movie Title: {movieTitle}</p>
         <span className="fw-bold me-2">Score:</span>
         {Array.from({ length: score }, (_) => (
           <i className="bi bi-star-fill me-1" style={{ color: "#ecc94b" }} />
@@ -67,10 +73,19 @@ const CommentReviewCard: React.FC<CommentReviewCardProps> = ({
           <i className="bi bi-star me-1" style={{ color: "#ecc94b" }} />
         ))}
 
-        <p className="card-text mt-2">{description}</p>
+        <p className="card-text mt-2 multiline">{description}</p>
       </div>
+      {showLikesAndComments && (
+        <LikeAndCommentReview
+          isLiked={isLiked}
+          handleLikeClick={handleLikeClick}
+          likesCount={likes}
+          handleCommentClick={handleCommentClick}
+          commentsCount={comments?.length}
+        />
+      )}
     </div>
   );
 };
 
-export default CommentReviewCard;
+export default ReviewCard;
