@@ -4,6 +4,11 @@ export { CanceledError };
 
 const baseURL = "http://localhost:3000";
 
+const refreshCacheApiClient = axios.create({
+  baseURL: baseURL,
+  withCredentials: true,
+});
+
 const apiClient = axios.create({
   baseURL: baseURL,
   withCredentials: true,
@@ -18,7 +23,7 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        await apiClient.get("/auth/refresh");
+        await refreshCacheApiClient.get("/auth/refresh");
         return await axios(originalRequest);
       } catch (error) {
         //window.location.href = "/login";

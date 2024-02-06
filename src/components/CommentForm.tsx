@@ -1,56 +1,34 @@
-import React, { useState } from "react";
-import { IComment, createComment } from "../services/comment-service";
+import React, { useRef } from "react";
+import { createComment } from "../services/comment-service";
 
 interface CommentFormProps {
   reviewId?: string;
 }
 
 const CommentForm: React.FC<CommentFormProps> = ({ reviewId }) => {
-  const [comment, setComment] = useState<IComment>({
-    description: "",
-    owner: "", // To do: to figure out how to get cureent user id
-    reviewId: reviewId || "",
-    timeStamp: new Date(),
-    userFullName: "", // To do: to figure out how to get cureent user id
-    userImgUrl: "", // To do: to figure out how to get cureent user id
-  });
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setComment((prevComment) => ({
-      ...prevComment,
-      description: e.target.value,
-    }));
-  };
+  const commentContent = useRef<HTMLTextAreaElement>(null);
 
   const handleCommentSubmit = async () => {
-    if (comment.description.trim() !== "") {
+    if (commentContent.current?.value.trim() !== "") {
       try {
-        await createComment(comment);
+        await createComment({
+          description: commentContent.current?.value!,
+          reviewId: reviewId!,
+        });
+        commentContent.current!.value = "";
       } catch (err) {
         console.log(err);
       }
-      setComment({
-        description: "",
-        owner: "",
-        reviewId: "",
-        timeStamp: new Date(),
-        userFullName: "",
-        userImgUrl: "",
-      });
     }
   };
 
   return (
-    <div className="d-flex align-items-center ms-0 ">
-      <p className="h4 col-3">Write a comment: </p>
-      <div className="p-2 col-4">
-        <input
+    <div className="d-flex align-items-center justify-content-center">
+      <div className="col-4">
+        <textarea
           className="form-control border-dark"
-          type="text"
-          value={comment.description}
-          onChange={handleInputChange}
+          ref={commentContent}
           placeholder="Enter your comment..."
-          aria-label="default input example"
         />
       </div>
       <div className="p-2 g-col-6">

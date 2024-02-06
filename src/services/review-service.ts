@@ -1,35 +1,30 @@
 import apiClient from "./api-client";
-import { IComment } from "./comment-service";
 
-export interface IReview {
-  _id?: string;
+export interface ReviewSubmition {
   movieTitle: string;
   description: string;
   score: number;
   reviewImgUrl: string;
-  timeStamp?: Date;
-  author?: {
+}
+
+export interface Review extends ReviewSubmition {
+  id: string;
+  timeStamp: Date;
+  author: {
     fullName: string;
     imgUrl: string;
   };
-  commentsCount?: number;
-  likesCount?: number;
-  isLiked?: boolean;
-  comments?: IComment[];
+  commentsCount: number;
+  likesCount: number;
+  isLiked: boolean;
 }
 
 export const getAllReviews = () => {
-  return new Promise<IReview[]>((resolve, reject) => {
+  return new Promise<Review[]>((resolve, reject) => {
     apiClient
       .get(`/reviews/`)
       .then((response) => {
-        const reviews = (response.data as IReview[]).sort((a, b) => {
-          return (
-            new Date(b.timeStamp || 0).getTime() -
-            new Date(a.timeStamp || 0).getTime()
-          );
-        });
-        resolve(reviews);
+        resolve(response.data as Review[]);
       })
       .catch((error) => {
         console.log("error in getting all reviews: ", error);
@@ -38,12 +33,12 @@ export const getAllReviews = () => {
   });
 };
 
-export const getReviewById = (review_id: string) => {
-  return new Promise<IReview[]>((resolve, reject) => {
+export const getReviewById = (reviewId: string) => {
+  return new Promise<Review[]>((resolve, reject) => {
     apiClient
-      .get(`/reviews/${review_id}`)
+      .get(`/reviews/${reviewId}`)
       .then((response) => {
-        const reviews = response.data as IReview[];
+        const reviews = response.data as Review[];
         resolve(reviews);
       })
       .catch((error) => {
@@ -53,18 +48,12 @@ export const getReviewById = (review_id: string) => {
   });
 };
 
-export const getReviewsByUserId = (user_id: string) => {
-  return new Promise<IReview[]>((resolve, reject) => {
+export const getReviewsByUserId = (userId: string) => {
+  return new Promise<Review[]>((resolve, reject) => {
     apiClient
-      .get(`/reviews/user/${user_id}`)
+      .get(`/reviews/user/${userId}`)
       .then((response) => {
-        const reviews = (response.data as IReview[]).sort((a, b) => {
-          return (
-            new Date(b.timeStamp).getTime() - new Date(a.timeStamp).getTime()
-          );
-        });
-
-        resolve(reviews);
+        resolve(response.data as Review[]);
       })
       .catch((error) => {
         console.log("error in getting all reviews of specific user: ", error);
@@ -73,10 +62,9 @@ export const getReviewsByUserId = (user_id: string) => {
   });
 };
 
-export const createReview = (review: IReview) => {
+export const createReview = (review: ReviewSubmition) => {
   return new Promise<void>((resolve, reject) => {
-    console.log("Creating review...");
-    console.log(review);
+    console.log("Creating review...", review);
     apiClient
       .post("/reviews", review)
       .then(() => {
@@ -89,12 +77,11 @@ export const createReview = (review: IReview) => {
   });
 };
 
-export const editReview = (review: IReview) => {
+export const likeReview = (reviewId: string) => {
   return new Promise<void>((resolve, reject) => {
-    console.log("Updating review...");
-    console.log(review);
+    console.log("Creating review...", reviewId);
     apiClient
-      .put(`/reviews/${review._id}`, review)
+      .get(`/reviews/like/${reviewId}`)
       .then(() => {
         resolve();
       })
@@ -105,12 +92,44 @@ export const editReview = (review: IReview) => {
   });
 };
 
-export const deleteReview = (review: IReview) => {
+export const unlikeReview = (reviewId: string) => {
   return new Promise<void>((resolve, reject) => {
-    console.log("Deleting user...");
-    console.log(review);
+    console.log("Creating review...", reviewId);
     apiClient
-      .delete(`/reviews/${review._id}`)
+      .get(`/reviews/unlike/${reviewId}`)
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
+export const editReview = (
+  reviewId: string,
+  review: Partial<ReviewSubmition>
+) => {
+  return new Promise<void>((resolve, reject) => {
+    console.log("Editing review...", reviewId, review);
+    apiClient
+      .put(`/reviews/${reviewId}`, review)
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
+export const deleteReview = (reviewId: string) => {
+  return new Promise<void>((resolve, reject) => {
+    console.log("Deleting review...", reviewId);
+    apiClient
+      .delete(`/reviews/${reviewId}`)
       .then(() => {
         resolve();
       })

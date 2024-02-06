@@ -3,10 +3,9 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import z from "zod";
-import "./auth/shake.css";
 import FormInput, { FormInputProps } from "./auth/FormInput";
 import { uploadPhoto } from "../services/file-service";
-import { IReview, createReview } from "../services/review-service";
+import { Review, createReview } from "../services/review-service";
 import EditReviewImage from "./EditReviewImage";
 
 interface NewReviewProps {

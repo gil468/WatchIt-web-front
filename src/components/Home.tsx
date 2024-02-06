@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import ReviewCard from "./ReviewCard";
-import { IReview, getAllReviews } from "../services/review-service";
+import {
+  Review,
+  getAllReviews,
+  likeReview,
+  unlikeReview,
+} from "../services/review-service";
 
 const Home: React.FC = () => {
-  const [reviews, setReviews] = useState<IReview[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -19,34 +24,48 @@ const Home: React.FC = () => {
     fetchReviews();
   }, []);
 
+  const handleReviewLike = async (reviewId: string) => {
+    await likeReview(reviewId);
+    const updatedReviews = reviews.map((review) => {
+      if (review.id === reviewId) {
+        return {
+          ...review,
+          isLiked: true,
+          likesCount: review.likesCount + 1,
+        };
+      }
+      return review;
+    });
+    setReviews(updatedReviews);
+  };
+
+  const handleReviewUnlike = async (reviewId: string) => {
+    await unlikeReview(reviewId);
+    const updatedReviews = reviews.map((review) => {
+      if (review.id === reviewId) {
+        return {
+          ...review,
+          isLiked: false,
+          likesCount: review.likesCount - 1,
+        };
+      }
+      return review;
+    });
+    setReviews(updatedReviews);
+  };
+
   return (
     <>
       <Navbar />
-      {reviews.map((review, index) => (
+      {reviews.map((review) => (
         <ReviewCard
-          key={index}
+          key={review.id}
           {...review}
-          userFullName={review.author?.fullName!}
-          userImgUrl={review.author?.imgUrl!}
+          showLikesAndComments={true}
+          likeReview={() => handleReviewLike(review.id)}
+          unlikeReview={() => handleReviewUnlike(review.id)}
         />
       ))}
-      {/* {Array.from({ length: 16 }, (_, id) => (
-        <ReviewCard
-          key={id}
-          reviewId={0}
-          commentsCount={40}
-          isLiked={false}
-          likeCount={45}
-          postedOn={new Date()}
-          reviewScore={4}
-          reviewImageUrl="https://generated.vusercontent.net/placeholder.svg"
-          reviewText="The best movie EVER!!!!!"
-          reviewerName="Oren Eyal"
-          reviewerProfilePictureUrl="https://generated.vusercontent.net/placeholder.svg"
-          likeReview={() => {}}
-          commentOnReview={() => {}}
-        />
-      ))} */}
     </>
   );
 };

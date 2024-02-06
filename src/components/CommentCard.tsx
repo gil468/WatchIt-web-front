@@ -4,18 +4,18 @@ interface CommentCardProps {
   userName: string;
   description: string;
   timestamp: string;
-//   profileImgUrl: string;
+  profileImgUrl: string;
 }
 
 const CommentCard: React.FC<CommentCardProps> = ({
   userName,
   description,
   timestamp,
-//   profileImgUrl,
+  //   profileImgUrl,
 }) => {
   return (
     <div className="col">
-      <div className="card border-dark mb-3" >
+      <div className="card border-dark mb-3">
         <div className="row g-0">
           <div className="col-md-1">
             {/* <img
@@ -31,7 +31,9 @@ const CommentCard: React.FC<CommentCardProps> = ({
             <div className="card-body">
               <h5 className="card-title">{userName}</h5>
               <p className="card-text">{description}</p>
-              <p className="card-text"><small className="text-body-secondary">{timestamp}</small></p>
+              <p className="card-text">
+                <small className="text-body-secondary">{timestamp}</small>
+              </p>
             </div>
           </div>
         </div>

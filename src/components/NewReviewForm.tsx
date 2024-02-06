@@ -1,18 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import z from "zod";
-import "./auth/shake.css";
 import FormInput, { FormInputProps } from "./auth/FormInput";
 import { uploadPhoto } from "../services/file-service";
-import { IReview, createReview } from "../services/review-service";
-import EditReviewImage from "../components/EditReviewImage";
-
-interface NewReviewProps {
-  movieId: number;
-  movieTitle: string;
-}
+import { ReviewSubmition, createReview } from "../services/review-service";
+import { Movie, getMovieById } from "../services/movie-service";
+import Navbar from "./Navbar";
+import FormTextArea from "./auth/FormTextArea";
+import FormInputImage from "./auth/FormInputFile";
 
 const schema = z
   .object({
@@ -35,11 +32,11 @@ const schema = z
 type FormData = z.infer<typeof schema>;
 
 const inputFields: FormInputProps[] = [
-  {
-    name: "reviewPicture",
-    label: "Review Picture",
-    type: "file",
-  },
+  // {
+  //   name: "reviewPicture",
+  //   label: "Review Picture",
+  //   type: "file",
+  // },
   {
     name: "score",
     label: "Score",
@@ -49,13 +46,31 @@ const inputFields: FormInputProps[] = [
   {
     name: "description",
     label: "Description",
-    type: "text",
+    type: "textArea",
     placeholder: "Write your review here...",
   },
 ];
 
-const NewReviewForm: React.FC<NewReviewProps> = ({ movieId, movieTitle }) => {
+const NewReviewForm: React.FC = () => {
   const navigate = useNavigate();
+  const { movieId } = useParams();
+  if (!movieId) {
+    navigate("/");
+  }
+
+  const [movie, setMovie] = useState<Movie | null>(null);
+
+  useEffect(() => {
+    const fetchMovie = async () => {
+      try {
+        const movie = await getMovieById(parseInt(movieId!));
+        setMovie(movie);
+      } catch (error) {
+        navigate("/");
+      }
+    };
+    fetchMovie();
+  }, []);
 
   const [shake, setShake] = useState(false);
 
@@ -72,8 +87,8 @@ const NewReviewForm: React.FC<NewReviewProps> = ({ movieId, movieTitle }) => {
   const onSubmit = async ({ description, score, reviewPicture }: FormData) => {
     const imgUrl = await uploadPhoto(reviewPicture[0]);
 
-    const review: IReview = {
-      movieTitle,
+    const review: ReviewSubmition = {
+      movieTitle: movie!.title,
       description,
       score,
       reviewImgUrl: imgUrl,
@@ -88,47 +103,66 @@ const NewReviewForm: React.FC<NewReviewProps> = ({ movieId, movieTitle }) => {
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center py-2">
-      <div
-        className={`border border-2 p-4 rounded ${shake && "shake"}`}
-        onAnimationEnd={() => setShake(false)}
-        style={{
-          width: "35rem",
-        }}
-      >
-        <div className="text-center">
-          <h1>Create New Review</h1>
-          <p className="text-muted mt-3">
-            Please edit the fields below in order to upload new review
-          </p>
+    <>
+      <Navbar />
 
-          <EditReviewImage imageUrl={initialImageUrl} />
-        </div>
-
-        <p className="h6">Title: {movieTitle}</p>
-
+      <div className="d-flex align-items-center justify-content-center py-2">
         <div
-          className="overflow-auto"
+          className={`border border-2 p-4 rounded ${shake && "shake"}`}
+          onAnimationEnd={() => setShake(false)}
           style={{
-            maxHeight: "calc(100vh - 11rem)",
+            width: "35rem",
           }}
         >
-          <FormProvider {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit, onErrorSubmit)}>
-              {inputFields.map((field) => (
-                <FormInput key={field.name} {...field} showValidFeedback />
-              ))}
+          <div className="text-center">
+            <p className="h2">Add Review</p>
+            <p className="h5 my-2 text-muted">{movie?.title}</p>
 
-              <div className="text-center mt-4">
-                <button type="submit" className="btn btn-dark w-100 mx-auto">
-                  Upload
-                </button>
-              </div>
-            </form>
-          </FormProvider>
+            {/* <img
+              src={`https://image.tmdb.org/t/p/w500${movie?.backdrop_path}`}
+              className="w-100 mb-2 rounded"
+              height="200"
+              style={{ backgroundColor: "#e3f2fd" }}
+            /> */}
+          </div>
+
+          <div
+            className="overflow-auto"
+            style={{
+              maxHeight: "calc(100vh - 11rem)",
+            }}
+          >
+            <FormProvider {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit, onErrorSubmit)}>
+                <FormInputImage
+                  name={"reviewPicture"}
+                  label={"Review Picture"}
+                  fullWidth
+                  defaultImage={"/public/images/placeholder.jpg"}
+                />
+                {inputFields.map((field) =>
+                  field.type === "textArea" ? (
+                    <FormTextArea
+                      key={field.name}
+                      {...field}
+                      showValidFeedback
+                    />
+                  ) : (
+                    <FormInput key={field.name} {...field} showValidFeedback />
+                  )
+                )}
+
+                <div className="text-center mt-4">
+                  <button type="submit" className="btn btn-dark w-100 mx-auto">
+                    Upload
+                  </button>
+                </div>
+              </form>
+            </FormProvider>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

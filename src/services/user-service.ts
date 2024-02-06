@@ -25,6 +25,20 @@ export const register = (user: IUser) => {
   });
 };
 
+export const update = (user: IUser) => {
+  return new Promise<void>((resolve, reject) => {
+    apiClient
+      .put(`/users/`, user)
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+};
+
 export const login = (user: IUser) => {
   return new Promise<void>((resolve, reject) => {
     console.log("user singing in...");
@@ -55,10 +69,11 @@ export const logout = () => {
   });
 };
 
-export const refresh = () => {
+export const googleSignin = (credentialResponse: CodeResponse) => {
   return new Promise<void>((resolve, reject) => {
+    console.log("googleSignin ...", credentialResponse);
     apiClient
-      .get("/auth/refresh")
+      .post("/auth/google", credentialResponse)
       .then(() => {
         resolve();
       })
@@ -69,13 +84,12 @@ export const refresh = () => {
   });
 };
 
-export const googleSignin = (credentialResponse: CodeResponse) => {
-  return new Promise<void>((resolve, reject) => {
-    console.log("googleSignin ...", credentialResponse);
+export const getMyUserData = () => {
+  return new Promise<IUser>((resolve, reject) => {
     apiClient
-      .post("/auth/google", credentialResponse)
-      .then(() => {
-        resolve();
+      .get("/users/connected")
+      .then((response) => {
+        resolve(response.data as IUser);
       })
       .catch((error) => {
         console.log(error);

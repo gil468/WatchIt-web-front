@@ -1,45 +1,40 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { IComment } from "./Comments";
 import { format } from "date-fns";
+import { Review } from "../services/review-service";
+import LikeAndCommentReview from "./LikeAndCommentReview";
 
-interface ReviewCardProps {
-  _id: string;
-  movieTitle: string;
-  description: string;
-  score: number;
-  reviewImgUrl: string;
-  timeStamp: Date;
-  owner: string;
-  userFullName: string;
-  userImgUrl: string;
-  commentsCount: number;
-  likesCount: number;
-  isLiked: object[];
-  comments?: IComment[];
+interface ReviewCardProps extends Review {
+  likeReview?: () => void;
+  unlikeReview?: () => void;
+  showLikesAndComments: boolean;
 }
 
 const ReviewCard: React.FC<ReviewCardProps> = ({
-  _id,
+  id,
   movieTitle,
   description,
   score,
   reviewImgUrl,
   timeStamp,
-  userFullName,
-  userImgUrl,
+  author,
   likesCount,
   commentsCount,
   isLiked,
+  showLikesAndComments,
+  likeReview,
+  unlikeReview,
 }) => {
   const navigate = useNavigate();
 
   const handleCommentClick = () => {
-    navigate(`/comments/${_id}`);
+    navigate(`/comments/${id}`);
   };
 
-  const handleLikeClick = () => {};
+  const handleLikeClick = () => {
+    isLiked ? unlikeReview!() : likeReview!();
+  };
 
   return (
     <div className="card w-50 mx-auto my-3 px-4 py-3">
@@ -51,13 +46,13 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
               className="rounded-circle ms-0 me-2"
               height="50"
               width="50"
-              src={userImgUrl}
+              src={author?.imgUrl}
             />
 
-            <p className="h5 my-0">{userFullName}</p>
+            <p className="h5 my-0">{author?.fullName}</p>
           </div>
           <small className="my-0 text-muted">
-            {`${format(new Date(timeStamp), "dd/MM/yyyy HH:mm:ss")}`}
+            {`${format(new Date(timeStamp || 0), "dd/MM/yyyy HH:mm:ss")}`}
           </small>
         </div>
       </div>
@@ -78,32 +73,17 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           <i className="bi bi-star me-1" style={{ color: "#ecc94b" }} />
         ))}
 
-        <p className="card-text mt-2">{description}</p>
+        <p className="card-text mt-2 multiline">{description}</p>
       </div>
-      <div className="text-center py-3">
-        <div className="d-flex justify-content-center gap-3">
-          <button
-            type="button"
-            className={`btn ${(isLiked && "btn-dark") || "btn-outline-dark"}`}
-            onClick={handleLikeClick}
-          >
-            <i className="bi bi-heart me-2 align-middle"></i>
-            Like
-            <div className="vr mx-2 align-middle"></div>
-            {likesCount || 0}
-          </button>
-          <button
-            type="button"
-            className="btn btn-outline-dark"
-            onClick={handleCommentClick}
-          >
-            <i className="bi bi-chat me-2 align-middle"></i>
-            Comment
-            <div className="vr mx-2 align-middle"></div>
-            {commentsCount || 0}
-          </button>
-        </div>
-      </div>
+      {showLikesAndComments && (
+        <LikeAndCommentReview
+          isLiked={isLiked}
+          handleLikeClick={handleLikeClick}
+          likesCount={likesCount}
+          handleCommentClick={handleCommentClick}
+          commentsCount={commentsCount}
+        />
+      )}
     </div>
   );
 };

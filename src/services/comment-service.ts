@@ -1,21 +1,22 @@
 import apiClient from "./api-client";
 
-export interface IComment {
-  _id?: string;
+export interface Comment {
+  id: string;
   description: string;
-  owner: string;
-  reviewId: string;
+  author: {
+    fullName: string;
+    imgUrl: string;
+  };
   timeStamp: Date;
-  userFullName: string;
-  userImgUrl: string;
+  reviewId: string;
 }
 
 export const getCommentsByReviewId = (review_id: string) => {
-  return new Promise<IComment[]>((resolve, reject) => {
+  return new Promise<Comment[]>((resolve, reject) => {
     apiClient
       .get(`/comments/review/${review_id}`)
       .then((response) => {
-        const comments = (response.data as IComment[]).sort((a, b) => {
+        const comments = (response.data as Comment[]).sort((a, b) => {
           return (
             new Date(b.timeStamp).getTime() - new Date(a.timeStamp).getTime()
           );
@@ -30,7 +31,9 @@ export const getCommentsByReviewId = (review_id: string) => {
   });
 };
 
-export const createComment = (comment: IComment) => {
+export const createComment = (
+  comment: Pick<Comment, "description" | "reviewId">
+) => {
   return new Promise<void>((resolve, reject) => {
     console.log("Creating comment...");
     console.log(comment);

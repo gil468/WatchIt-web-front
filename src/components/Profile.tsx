@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "./Navbar";
-import EditProfile from "./auth/EditProfile";
+import EditProfile from "./EditProfile";
 
 const Home: React.FC = () => {
   return (

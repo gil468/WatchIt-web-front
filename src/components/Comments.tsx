@@ -4,8 +4,8 @@ import Navbar from "./Navbar";
 import CommentCard from "./CommentCard";
 import { getCommentsByReviewId } from "../services/comment-service";
 import CommentForm from "./CommentForm";
-import CommentReviewCard from "./CommentReviewCard";
-import { IReview, getReviewById } from "../services/review-service";
+import { Review, getReviewById } from "../services/review-service";
+import ReviewCard from "./ReviewCard";
 
 export interface IComment {
   _id?: string;
@@ -18,7 +18,7 @@ export interface IComment {
 }
 
 const Comments: React.FC = () => {
-  const [review, setReview] = useState<IReview[]>([]);
+  const [review, setReview] = useState<Review[]>([]);
   const [comments, setComments] = useState<IComment[]>([]);
   const [dataLoaded, setDataLoaded] = useState(false);
 
@@ -64,7 +64,7 @@ const Comments: React.FC = () => {
   return (
     <>
       <Navbar />
-      <CommentReviewCard {...review}/>
+      <ReviewCard {...review} showLikesAndComments={false} />
       <div
         className="row row-cols-1 row-cols"
         style={{
@@ -74,7 +74,7 @@ const Comments: React.FC = () => {
         }}
       >
         <CommentForm reviewId={reviewId} />
-        <p className="h2" style={{ paddingTop: "30px" }}>
+        <p className="h2 text-center" style={{ paddingTop: "30px" }}>
           Comments
         </p>
         {comments.map((comment, index) => (

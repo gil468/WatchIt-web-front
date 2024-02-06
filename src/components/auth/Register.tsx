@@ -3,11 +3,11 @@ import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import z from "zod";
-import "./shake.css";
 import FormInput, { FormInputProps } from "./FormInput";
 import { uploadPhoto } from "../../services/file-service";
 import { IUser, googleSignin, register } from "../../services/user-service";
 import { CodeResponse, useGoogleLogin } from "@react-oauth/google";
+import FormInputImage from "./FormInputFile";
 
 const schema = z
   .object({
@@ -24,9 +24,10 @@ const schema = z
     confirmPassword: z
       .string()
       .min(5, "Password must contain at least 5 characters"),
-    profilePicture: z
-      .any()
-      .refine((val) => val.length > 0, "Profile picture is required"),
+    profilePicture: z.any().refine((val) => {
+      console.log("Hellppp", val);
+      return val.length > 0;
+    }, "Profile picture is required"),
   })
   .refine(
     (values) => {
@@ -63,11 +64,11 @@ const inputFields: FormInputProps[] = [
     label: "Confirm Password",
     type: "password",
   },
-  {
-    name: "profilePicture",
-    label: "Profile Picture",
-    type: "file",
-  },
+  // {
+  //   name: "profilePicture",
+  //   label: "Profile Picture",
+  //   type: "file",
+  // },
 ];
 
 const Register: React.FC = () => {
@@ -136,6 +137,11 @@ const Register: React.FC = () => {
         >
           <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit, onErrorSubmit)}>
+              <FormInputImage
+                name={"profilePicture"}
+                label={"Profile Picture"}
+                defaultImage={"/public/images/profile_pic_placeholder.png"}
+              />
               {inputFields.map((field) => (
                 <FormInput key={field.name} {...field} showValidFeedback />
               ))}

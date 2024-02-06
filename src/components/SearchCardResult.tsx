@@ -18,9 +18,7 @@ const SearchCardResult: React.FC<SearchCardProps> = ({
 
   const handleAddReview = () => {
     console.log("Add review for movie:", id);
-    navigate(`/addReview`, {
-      state: { id, title, poster_path },
-    });
+    navigate(`/addReview/${id}`);
   };
 
   return (
