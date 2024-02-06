@@ -3,31 +3,23 @@ import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import z from "zod";
-import FormInput, { FormInputProps } from "../form/FormInput";
-import { uploadPhoto } from "../../services/file-service";
-import { ReviewSubmition, createReview } from "../../services/review-service";
-import { Movie, getMovieById } from "../../services/movie-service";
-import Navbar from "../Navbar";
-import FormTextArea from "../form/FormTextArea";
-import FormInputImage from "../form/FormInputFile";
+import FormInput, { FormInputProps } from "../../form/FormInput";
+import {
+  Review,
+  ReviewSubmition,
+  editReview,
+  getReviewById,
+} from "../../../services/review-service";
+import { uploadPhoto } from "../../../services/file-service";
+import Navbar from "../../Navbar";
+import FormInputImage from "../../form/FormInputFile";
+import FormTextArea from "../../form/FormTextArea";
 
-const schema = z
-  .object({
-    description: z.string().min(1, "Description can't be empty"),
-    score: z.number().min(1).max(5),
-    reviewPicture: z
-      .any()
-      .refine((val) => val.length > 0, "Review picture is required"),
-  })
-  .refine(
-    (values) => {
-      return values.score;
-    },
-    {
-      message: "Score can't be empty",
-      path: ["score"],
-    }
-  );
+const schema = z.object({
+  description: z.string().min(1, "Description can't be empty"),
+  score: z.number().min(1).max(5),
+  reviewPicture: z.any(),
+});
 
 type FormData = z.infer<typeof schema>;
 
@@ -48,18 +40,19 @@ const inputFields: FormInputProps[] = [
 
 const NewReviewForm: React.FC = () => {
   const navigate = useNavigate();
-  const { movieId } = useParams();
-  if (!movieId) {
-    navigate("/");
+  const { reviewId } = useParams();
+  if (!reviewId) {
+    navigate("/myreviews");
   }
 
-  const [movie, setMovie] = useState<Movie | null>(null);
+  const [review, setReview] = useState<Review | null>(null);
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const movie = await getMovieById(parseInt(movieId!));
-        setMovie(movie);
+        const review = await getReviewById(reviewId!);
+        setReview(review);
+        form.reset(review);
       } catch (error) {
         navigate("/");
       }
@@ -75,17 +68,26 @@ const NewReviewForm: React.FC = () => {
   });
 
   const onSubmit = async ({ description, score, reviewPicture }: FormData) => {
-    const imgUrl = await uploadPhoto(reviewPicture[0]);
+    if (
+      description !== review?.description ||
+      score !== review?.score ||
+      reviewPicture.length !== 0
+    ) {
+      const imgUrl =
+        reviewPicture.length !== 0
+          ? await uploadPhoto(reviewPicture[0])
+          : review?.reviewImgUrl!;
 
-    const review: ReviewSubmition = {
-      movieTitle: movie!.title,
-      description,
-      score,
-      reviewImgUrl: imgUrl,
-    };
+      const user: ReviewSubmition = {
+        movieTitle: review!.movieTitle,
+        description,
+        score,
+        reviewImgUrl: imgUrl,
+      };
 
-    await createReview(review);
-    navigate("/home");
+      await editReview(reviewId!, user);
+    }
+    navigate("/myreviews");
   };
 
   const onErrorSubmit = () => {
@@ -106,14 +108,7 @@ const NewReviewForm: React.FC = () => {
         >
           <div className="text-center">
             <p className="h2">Add Review</p>
-            <p className="h5 my-2 text-muted">{movie?.title}</p>
-
-            {/* <img
-              src={`https://image.tmdb.org/t/p/w500${movie?.backdrop_path}`}
-              className="w-100 mb-2 rounded"
-              height="200"
-              style={{ backgroundColor: "#e3f2fd" }}
-            /> */}
+            <p className="h5 my-2 text-muted">{review?.movieTitle}</p>
           </div>
 
           <div
@@ -128,7 +123,7 @@ const NewReviewForm: React.FC = () => {
                   name={"reviewPicture"}
                   label={"Review Picture"}
                   fullWidth
-                  defaultImage={"/public/images/placeholder.jpg"}
+                  defaultImage={review?.reviewImgUrl || ""}
                 />
                 {inputFields.map((field) =>
                   field.type === "textArea" ? (

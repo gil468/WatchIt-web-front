@@ -5,16 +5,16 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.js";
 import "./components/css/global.css";
-import Feed from "./components/feed/Feed.tsx";
+import Feed from "./components/review/feed/Feed.tsx";
 import Login from "./components/auth/Login.tsx";
 import Register from "./components/auth/Register.tsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Profile from "./components/profile/Profile.tsx";
 import Search from "./components/search/Search.tsx";
 import Comments from "./components/comment/Comments.tsx";
-import MyReviews from "./components/feed/MyReviews.tsx";
+import MyReviews from "./components/review/my reviews/MyReviews.tsx";
 import NewReviewForm from "./components/review/NewReviewForm.tsx";
-import EditReview from "./components/review/EditReview.tsx";
+import EditReviewForm from "./components/review/my reviews/EditReviewForm.tsx";
 
 const router = createBrowserRouter([
   {
@@ -55,7 +55,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/edit/review/:reviewId",
-    element: <EditReview />,
+    element: <EditReviewForm />,
   },
 ]);
 

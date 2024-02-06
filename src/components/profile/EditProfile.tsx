@@ -123,7 +123,7 @@ const EditProfile: React.FC = () => {
 
               <div className="text-center mt-4">
                 <button type="submit" className="btn btn-dark w-100 mx-auto">
-                  Update
+                  Update Profile
                 </button>
               </div>
             </form>

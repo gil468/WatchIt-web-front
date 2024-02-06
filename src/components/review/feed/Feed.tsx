@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../Navbar";
-import ReviewCard from "../review/ReviewCard";
+import Navbar from "../../Navbar";
+import ReviewCard from "../ReviewCard";
 import {
   Review,
   getAllReviews,
   likeReview,
   unlikeReview,
-} from "../../services/review-service";
+} from "../../../services/review-service";
 
 const Feed: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
