@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import z from "zod";
 import FormInput, { FormInputProps } from "../form/FormInput";
 import { uploadPhoto } from "../../services/file-service";
-import { IUser, getMyUserData, update } from "../../services/user-service";
+import { User, getMyUserData, update } from "../../services/user-service";
 import FormInputImage from "../form/FormInputFile";
 
 const schema = z.object({
@@ -42,7 +42,7 @@ const EditProfile: React.FC = () => {
   const navigate = useNavigate();
 
   const [shake, setShake] = useState(false);
-  const [originalUser, setOriginalUser] = useState<IUser | null>(null);
+  const [originalUser, setOriginalUser] = useState<User | null>(null);
 
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -72,7 +72,7 @@ const EditProfile: React.FC = () => {
           ? await uploadPhoto(profilePicture[0])
           : originalUser?.imgUrl;
 
-      const user: IUser = {
+      const user: User = {
         fullName,
         email,
         imgUrl,

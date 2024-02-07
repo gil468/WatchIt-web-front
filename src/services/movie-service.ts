@@ -21,7 +21,6 @@ export const searchMovie = (searchTerm: string) => {
         resolve(movies);
       })
       .catch((error) => {
-        console.log("error movies", error);
         reject(error);
       });
   });
@@ -35,7 +34,6 @@ export const getMovieById = (movieId: number) => {
         resolve(response.data as Movie);
       })
       .catch((error) => {
-        console.log("error movie", error);
         reject(error);
       });
   });

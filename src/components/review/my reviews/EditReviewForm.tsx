@@ -11,7 +11,6 @@ import {
   getReviewById,
 } from "../../../services/review-service";
 import { uploadPhoto } from "../../../services/file-service";
-import Navbar from "../../Navbar";
 import FormInputImage from "../../form/FormInputFile";
 import FormTextArea from "../../form/FormTextArea";
 
@@ -48,7 +47,7 @@ const NewReviewForm: React.FC = () => {
   const [review, setReview] = useState<Review | null>(null);
 
   useEffect(() => {
-    const fetchMovie = async () => {
+    const fetchReview = async () => {
       try {
         const review = await getReviewById(reviewId!);
         setReview(review);
@@ -57,7 +56,7 @@ const NewReviewForm: React.FC = () => {
         navigate("/");
       }
     };
-    fetchMovie();
+    fetchReview();
   }, []);
 
   const [shake, setShake] = useState(false);
@@ -96,8 +95,6 @@ const NewReviewForm: React.FC = () => {
 
   return (
     <>
-      <Navbar />
-
       <div className="d-flex align-items-center justify-content-center py-2">
         <div
           className={`border border-2 p-4 rounded ${shake && "shake"}`}

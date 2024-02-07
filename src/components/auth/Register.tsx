@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import z from "zod";
 import FormInput, { FormInputProps } from "../form/FormInput";
 import { uploadPhoto } from "../../services/file-service";
-import { IUser, googleSignin, register } from "../../services/user-service";
+import { User, googleSignin, register } from "../../services/user-service";
 import { CodeResponse, useGoogleLogin } from "@react-oauth/google";
 import FormInputImage from "../form/FormInputFile";
 
@@ -89,7 +89,7 @@ const Register: React.FC = () => {
   }: FormData) => {
     const imgUrl = await uploadPhoto(profilePicture[0]);
 
-    const user: IUser = {
+    const user: User = {
       fullName,
       email,
       password,

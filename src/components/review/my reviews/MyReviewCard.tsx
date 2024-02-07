@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Review, deleteReview } from "../../../services/review-service";
+import { Review } from "../../../services/review-service";
 import UserAndTimestampCardHeader from "../../UserAndTimestampCardHeader";
 import ReviewCardBody from "../ReviewCardBody";
 
@@ -22,7 +22,7 @@ const MyReviewCard: React.FC<MyReviewCardProps> = ({
   const navigate = useNavigate();
 
   const handleEditClick = () => {
-    navigate(`/edit/review/${id}`);
+    navigate(`/editReview/${id}`);
   };
 
   return (

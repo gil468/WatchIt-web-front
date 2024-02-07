@@ -26,7 +26,7 @@ apiClient.interceptors.response.use(
         await refreshCacheApiClient.get("/auth/refresh");
         return await axios(originalRequest);
       } catch (error) {
-        //window.location.href = "/login";
+        window.location.href = "/login";
         console.log("Error: ", error);
       }
     }

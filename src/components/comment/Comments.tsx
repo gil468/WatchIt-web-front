@@ -1,20 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "../Navbar";
 import CommentCard from "./CommentCard";
 import CommentForm from "./CommentForm";
 import { Review, getReviewById } from "../../services/review-service";
 import ReviewCard from "../review/ReviewCard";
-
-export interface IComment {
-  _id?: string;
-  description: string;
-  owner: string;
-  reviewId: string;
-  timeStamp: Date;
-  userFullName: string;
-  userImgUrl: string;
-}
 
 const Comments: React.FC = () => {
   const [review, setReview] = useState<Review | null>(null);
@@ -38,7 +27,6 @@ const Comments: React.FC = () => {
 
   return (
     <>
-      <Navbar />
       {review && <ReviewCard {...review} showLikesAndComments={false} />}
       <p className="h3 text-center mt-0">Comments</p>
       <CommentForm

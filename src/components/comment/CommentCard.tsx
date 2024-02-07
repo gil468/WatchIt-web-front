@@ -1,5 +1,4 @@
 import React from "react";
-import { format } from "date-fns";
 import { Comment } from "../../services/comment-service";
 import UserAndTimestampCardHeader from "../UserAndTimestampCardHeader";
 

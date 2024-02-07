@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../../Navbar";
 import MyReviewCard from "./MyReviewCard";
 import {
   Review,
@@ -30,7 +29,6 @@ const MyReviews: React.FC = () => {
 
   return (
     <>
-      <Navbar />
       {reviews.map((review) => (
         <MyReviewCard
           key={review.id}

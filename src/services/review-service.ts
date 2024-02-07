@@ -28,7 +28,6 @@ export const getAllReviews = () => {
         resolve(response.data as Review[]);
       })
       .catch((error) => {
-        console.log("error in getting all reviews: ", error);
         reject(error);
       });
   });
@@ -43,7 +42,6 @@ export const getReviewById = (reviewId: string) => {
         resolve(review);
       })
       .catch((error) => {
-        console.log("error in getting specific review: ", error);
         reject(error);
       });
   });
