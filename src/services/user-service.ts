@@ -41,8 +41,6 @@ export const update = (user: User) => {
 
 export const login = (user: User) => {
   return new Promise<void>((resolve, reject) => {
-    console.log("user singing in...");
-    console.log(user);
     apiClient
       .post("/auth/login", user)
       .then(() => {
@@ -71,14 +69,12 @@ export const logout = () => {
 
 export const googleSignin = (credentialResponse: CodeResponse) => {
   return new Promise<void>((resolve, reject) => {
-    console.log("googleSignin ...", credentialResponse);
     apiClient
       .post("/auth/google", credentialResponse)
       .then(() => {
         resolve();
       })
       .catch((error) => {
-        console.log(error);
         reject(error);
       });
   });
@@ -92,7 +88,6 @@ export const getMyUserData = () => {
         resolve(response.data as User);
       })
       .catch((error) => {
-        console.log(error);
         reject(error);
       });
   });
