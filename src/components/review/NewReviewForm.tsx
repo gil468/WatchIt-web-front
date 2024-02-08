@@ -9,6 +9,7 @@ import { ReviewSubmition, createReview } from "../../services/review-service";
 import { Movie, getMovieById } from "../../services/movie-service";
 import FormTextArea from "../form/FormTextArea";
 import FormInputImage from "../form/FormInputFile";
+import placeholderImgUrl from "/public/images/placeholder.jpg";
 
 const schema = z
   .object({
@@ -125,7 +126,7 @@ const NewReviewForm: React.FC = () => {
                   name={"reviewPicture"}
                   label={"Review Picture"}
                   fullWidth
-                  defaultImage={"/public/images/placeholder.jpg"}
+                  defaultImage={placeholderImgUrl}
                 />
                 {inputFields.map((field) =>
                   field.type === "textArea" ? (

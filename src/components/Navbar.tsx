@@ -2,6 +2,7 @@ import React from "react";
 import { logout } from "../services/user-service";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import appLogoUrl from "/public/images/WatchIt!.png";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const Navbar: React.FC = () => {
       <nav className="navbar navbar-expand-lg bg-light">
         <div className="container-fluid">
           <img
-            src="/public/images/WatchIt!.png"
+            src={appLogoUrl}
             alt="Logo"
             width="35"
             height="35"

@@ -8,6 +8,7 @@ import { uploadPhoto } from "../../services/file-service";
 import { User, googleSignin, register } from "../../services/user-service";
 import { CodeResponse, useGoogleLogin } from "@react-oauth/google";
 import FormInputImage from "../form/FormInputFile";
+import profilePicPlaceholder from "/public/images/profile_pic_placeholder.png";
 
 const schema = z
   .object({
@@ -64,11 +65,6 @@ const inputFields: FormInputProps[] = [
     label: "Confirm Password",
     type: "password",
   },
-  // {
-  //   name: "profilePicture",
-  //   label: "Profile Picture",
-  //   type: "file",
-  // },
 ];
 
 const Register: React.FC = () => {
@@ -140,7 +136,7 @@ const Register: React.FC = () => {
               <FormInputImage
                 name={"profilePicture"}
                 label={"Profile Picture"}
-                defaultImage={"/public/images/profile_pic_placeholder.png"}
+                defaultImage={profilePicPlaceholder}
               />
               {inputFields.map((field) => (
                 <FormInput key={field.name} {...field} showValidFeedback />
