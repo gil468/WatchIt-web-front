@@ -2,7 +2,7 @@ import React from "react";
 import { logout } from "../services/user-service";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import appLogoUrl from "/public/images/WatchIt!.png";
+import appLogoUrl from "/src/images/WatchIt!.png";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();

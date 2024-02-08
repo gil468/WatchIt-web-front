@@ -8,7 +8,7 @@ import { uploadPhoto } from "../../services/file-service";
 import { User, googleSignin, register } from "../../services/user-service";
 import { CodeResponse, useGoogleLogin } from "@react-oauth/google";
 import FormInputImage from "../form/FormInputFile";
-import profilePicPlaceholder from "/public/images/profile_pic_placeholder.png";
+import profilePicPlaceholder from "/src/images/profile_pic_placeholder.png";
 
 const schema = z
   .object({

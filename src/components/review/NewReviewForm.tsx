@@ -9,7 +9,7 @@ import { ReviewSubmition, createReview } from "../../services/review-service";
 import { Movie, getMovieById } from "../../services/movie-service";
 import FormTextArea from "../form/FormTextArea";
 import FormInputImage from "../form/FormInputFile";
-import placeholderImgUrl from "/public/images/placeholder.jpg";
+import placeholderImgUrl from "/src/images/placeholder.jpg";
 
 const schema = z
   .object({
