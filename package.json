@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "prod": "tsc && vite build && pm2 restart ecosystem.config.js --env production"
+    "prod": "tsc && vite build && pm2 restart ecosystem.config.cjs --env production"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
