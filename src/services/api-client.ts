@@ -2,7 +2,9 @@ import axios, { CanceledError } from "axios";
 
 export { CanceledError };
 
-const baseURL = "http://localhost:3000";
+const baseURL = import.meta.env.PROD
+  ? "https://node33.cs.colman.ac.il"
+  : "http://localhost:3000";
 
 const refreshCacheApiClient = axios.create({
   baseURL: baseURL,
