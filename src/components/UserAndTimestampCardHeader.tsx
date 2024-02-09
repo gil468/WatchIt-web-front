@@ -2,7 +2,7 @@ import React from "react";
 import { format } from "date-fns";
 
 interface UserAndTimestampCardHeaderProps {
-  author: { fullName: string; imgUrl: string };
+  author: { fullName?: string; imgUrl?: string };
   timeStamp: Date;
 }
 
